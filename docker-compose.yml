@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  se-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: se-agent-app
+    ports:
+      - "8000:8000"  # FastAPI
+      - "7860:7860"  # Gradio
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DAILY_API_BUDGET=${DAILY_API_BUDGET:-10.0}
+    volumes:
+      - ./data:/app/data
+      - app-logs:/app/logs
+    depends_on:
+      chromadb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - se-agent-network
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: se-agent-chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - se-agent-network
+
+volumes:
+  chroma-data:
+  app-logs:
+
+networks:
+  se-agent-network:
+    driver: bridge

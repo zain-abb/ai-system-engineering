@@ -94,3 +94,19 @@ target/
 
 # exclude data from source control by default
 # /data/
+
+# ChromaDB data
+chroma-data/
+
+# Logs
+logs/
+*.log
+
+# Pytest cache
+.pytest_cache/
+
+# Ruff cache
+.ruff_cache/
+
+# Docker volumes
+app-logs/
