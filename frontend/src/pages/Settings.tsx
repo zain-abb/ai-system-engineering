@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2, FolderOpen, Trash2, Database, History } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,9 +10,28 @@ import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
 
+// localStorage keys
+const STORAGE_KEYS = {
+  INDEX_DIRECTORY: 'se-agent-index-directory',
+  EXTENSIONS: 'se-agent-extensions',
+}
+
 export default function Settings() {
-  const [indexDirectory, setIndexDirectory] = useState('')
-  const [extensions, setExtensions] = useState('.py, .js, .ts')
+  const [indexDirectory, setIndexDirectory] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.INDEX_DIRECTORY) || ''
+  })
+  const [extensions, setExtensions] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.EXTENSIONS) || '.py, .js, .ts'
+  })
+
+  // Persist to localStorage when values change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.INDEX_DIRECTORY, indexDirectory)
+  }, [indexDirectory])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.EXTENSIONS, extensions)
+  }, [extensions])
   const { toast } = useToast()
   const queryClient = useQueryClient()
 

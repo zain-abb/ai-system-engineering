@@ -26,7 +26,7 @@ const languages = [
 ]
 
 const focusAreas = [
-  { value: '', label: 'General Review' },
+  { value: 'general', label: 'General Review' },
   { value: 'security', label: 'Security' },
   { value: 'performance', label: 'Performance' },
   { value: 'readability', label: 'Readability' },
@@ -37,7 +37,7 @@ const focusAreas = [
 export default function CodeReview() {
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState('python')
-  const [focus, setFocus] = useState('')
+  const [focus, setFocus] = useState('general')
   const { toast } = useToast()
 
   const mutation = useMutation({
@@ -64,7 +64,7 @@ export default function CodeReview() {
     mutation.mutate({
       code,
       language,
-      focus: focus || undefined,
+      focus: focus === 'general' ? undefined : focus,
     })
   }
 

@@ -131,7 +131,7 @@ class BaseCapability(ABC):
                 metadata={
                     "language": request.language,
                     "has_context": request.context is not None,
-                    "usage": self.client.get_usage_stats()
+                    "usage": self.client.get_last_request_usage()
                 }
             )
 

@@ -255,7 +255,7 @@ class AgentController:
                 result=response.result,
                 capability_used=intent.primary_intent,
                 intent_classification=intent,
-                usage=self.client.get_usage_stats(),
+                usage=self.client.get_last_request_usage(),
                 error=response.error,
                 context_used=context_used,
                 context_sources=context_sources

@@ -207,11 +207,40 @@ class ClaudeClient:
 
     def get_usage_stats(self) -> Dict[str, Any]:
         """Get current usage statistics."""
+        # Calculate totals from usage history
+        total_input = sum(u.input_tokens for u in self.cost_tracker.usage_history)
+        total_output = sum(u.output_tokens for u in self.cost_tracker.usage_history)
+        total_cost = sum(u.total_cost for u in self.cost_tracker.usage_history)
+
         return {
             "daily_usage": self.cost_tracker.daily_usage,
             "daily_limit": self.cost_tracker.daily_limit,
             "remaining": self.cost_tracker.get_remaining_budget(),
             "request_count": len(self.cost_tracker.usage_history),
+            # Fields expected by frontend
+            "total_requests": len(self.cost_tracker.usage_history),
+            "input_tokens": total_input,
+            "output_tokens": total_output,
+            "total_tokens": total_input + total_output,
+            "total_cost": total_cost,
+        }
+
+    def get_last_request_usage(self) -> Dict[str, Any]:
+        """Get usage stats for the last request only."""
+        if not self.cost_tracker.usage_history:
+            return {
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0,
+                "cost": 0.0,
+            }
+
+        last = self.cost_tracker.usage_history[-1]
+        return {
+            "input_tokens": last.input_tokens,
+            "output_tokens": last.output_tokens,
+            "total_tokens": last.input_tokens + last.output_tokens,
+            "cost": last.total_cost,
         }
 
 
