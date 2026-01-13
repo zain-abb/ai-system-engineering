@@ -110,3 +110,9 @@ logs/
 
 # Docker volumes
 app-logs/
+
+# Frontend
+frontend/node_modules
+
+# Frontend dist
+frontend/dist
