@@ -1,5 +1,19 @@
 """Main entry point for SE-Agent application."""
 
+# Fix threading conflicts between NumExpr/sentence-transformers and ChromaDB
+# MUST be set before any imports that might trigger these libraries
+import os
+os.environ["NUMEXPR_MAX_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# Disable ChromaDB telemetry to avoid gRPC/protobuf mutex issues
+os.environ["ANONYMIZED_TELEMETRY"] = "false"
+os.environ["CHROMA_TELEMETRY"] = "false"
+
+import asyncio
 import logging
 import sys
 from contextlib import asynccontextmanager
@@ -282,9 +296,11 @@ async def index_codebase(request: IndexRequest):
         raise HTTPException(status_code=503, detail="Agent not initialized")
 
     try:
-        chunk_count = agent.index_codebase(
-            directory=request.directory,
-            extensions=request.extensions
+        # Run blocking indexing operation in a thread pool to avoid blocking async loop
+        chunk_count = await asyncio.to_thread(
+            agent.index_codebase,
+            request.directory,
+            request.extensions
         )
         return {
             "status": "indexed",

@@ -1,5 +1,17 @@
 """ChromaDB vector store for code embeddings."""
 
+# Fix threading conflicts - must be set before importing ANY other modules
+import os
+os.environ["NUMEXPR_MAX_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# Disable ChromaDB telemetry to avoid gRPC mutex issues
+os.environ["ANONYMIZED_TELEMETRY"] = "false"
+os.environ["CHROMA_TELEMETRY"] = "false"
+
 import logging
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
@@ -43,7 +55,7 @@ class SearchResult:
 
 
 class EmbeddingFunction:
-    """Wrapper for embedding generation."""
+    """Wrapper for embedding generation using sentence-transformers with PyTorch backend."""
 
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
         """
@@ -57,20 +69,44 @@ class EmbeddingFunction:
 
     @property
     def model(self):
-        """Lazy load the embedding model."""
+        """Lazy load the embedding model with PyTorch backend only."""
         if self._model is None:
             try:
+                # Configure PyTorch for single-threaded operation
+                import torch
+                torch.set_num_threads(1)
+                torch.set_num_interop_threads(1)
+
+                # Disable ONNX Runtime backend in sentence-transformers
+                os.environ["SENTENCE_TRANSFORMERS_BACKEND"] = "torch"
+
                 from sentence_transformers import SentenceTransformer
-                self._model = SentenceTransformer(self.model_name)
+
+                # Load model explicitly with PyTorch backend
+                self._model = SentenceTransformer(
+                    self.model_name,
+                    device="cpu",
+                    backend="torch"  # Force PyTorch, not ONNX
+                )
+                logger.info(f"Loaded embedding model: {self.model_name} (PyTorch backend)")
+            except TypeError:
+                # Older sentence-transformers doesn't have backend parameter
+                from sentence_transformers import SentenceTransformer
+                self._model = SentenceTransformer(self.model_name, device="cpu")
                 logger.info(f"Loaded embedding model: {self.model_name}")
-            except ImportError:
-                logger.error("sentence-transformers not installed")
+            except ImportError as e:
+                logger.error(f"Failed to load embedding model: {e}")
                 raise
         return self._model
 
     def __call__(self, input: List[str]) -> List[List[float]]:
         """Generate embeddings for input texts."""
-        embeddings = self.model.encode(input, convert_to_numpy=True)
+        embeddings = self.model.encode(
+            input,
+            convert_to_numpy=True,
+            show_progress_bar=False,
+            normalize_embeddings=True
+        )
         return embeddings.tolist()
 
 
@@ -116,10 +152,22 @@ class ChromaVectorStore:
         else:
             # Use persistent client for local development
             if persist_directory:
-                self.client = chromadb.PersistentClient(path=persist_directory)
+                # Ensure directory exists
+                os.makedirs(persist_directory, exist_ok=True)
+                # Use Settings to disable telemetry and configure for single-threaded use
+                settings = Settings(
+                    anonymized_telemetry=False,
+                    allow_reset=True,
+                    is_persistent=True
+                )
+                self.client = chromadb.PersistentClient(
+                    path=persist_directory,
+                    settings=settings
+                )
                 logger.info(f"Using persistent ChromaDB at {persist_directory}")
             else:
-                self.client = chromadb.Client()
+                settings = Settings(anonymized_telemetry=False)
+                self.client = chromadb.Client(settings)
                 logger.info("Using in-memory ChromaDB")
 
         # Get or create collection

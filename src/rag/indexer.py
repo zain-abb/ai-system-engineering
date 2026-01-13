@@ -447,7 +447,8 @@ class CodeIndexer:
             dirs[:] = [d for d in dirs if d not in self.IGNORE_DIRS and not d.startswith('.')]
 
             for file in files:
-                if file in self.IGNORE_FILES:
+                # Skip hidden files and ignored files
+                if file.startswith('.') or file in self.IGNORE_FILES:
                     continue
 
                 path = Path(root) / file

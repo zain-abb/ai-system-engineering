@@ -98,6 +98,9 @@ target/
 # ChromaDB data
 chroma-data/
 
+# Persistence data (conversation history, RAG index)
+data/persistence/
+
 # Logs
 logs/
 *.log

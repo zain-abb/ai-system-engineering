@@ -1,11 +1,19 @@
 """Main agent controller for SE-Agent."""
 
+import json
 import logging
+import os
+from pathlib import Path
 from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 
 from src.services.claude_client import ClaudeClient
+from src.config import PROJECT_ROOT
+
+# Persistence directory
+DATA_DIR = PROJECT_ROOT / "data" / "persistence"
+HISTORY_FILE = DATA_DIR / "conversation_history.json"
 from src.agent.router import IntentRouter, IntentClassification
 from src.capabilities.base import (
     CapabilityType,
@@ -25,13 +33,16 @@ logger = logging.getLogger(__name__)
 # Lazy import RAG to avoid circular imports and optional dependency
 _retriever = None
 
+# RAG persistence directory
+RAG_PERSIST_DIR = str(DATA_DIR / "chroma_db")
+
 def _get_retriever():
     """Lazy load the retriever."""
     global _retriever
     if _retriever is None:
         try:
             from src.rag import create_retriever
-            _retriever = create_retriever()
+            _retriever = create_retriever(persist_directory=RAG_PERSIST_DIR)
         except ImportError as e:
             logger.warning(f"RAG module not available: {e}")
             _retriever = False  # Mark as unavailable
@@ -89,6 +100,12 @@ class AgentController:
         self.max_history = max_history
         self.conversation_history: List[ConversationMessage] = []
         self._retriever = None  # Lazy loaded
+
+        # Ensure persistence directory exists
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Load persisted history
+        self._load_history()
 
         # Initialize capabilities
         self.capabilities = {
@@ -355,6 +372,9 @@ class AgentController:
         if len(self.conversation_history) > self.max_history:
             self.conversation_history = self.conversation_history[-self.max_history:]
 
+        # Persist to disk
+        self._save_history()
+
     def get_conversation_history(self) -> List[ConversationMessage]:
         """Get the conversation history."""
         return self.conversation_history.copy()
@@ -362,6 +382,41 @@ class AgentController:
     def clear_history(self) -> None:
         """Clear the conversation history."""
         self.conversation_history.clear()
+        self._save_history()
+
+    def _save_history(self) -> None:
+        """Save conversation history to disk."""
+        try:
+            history_data = []
+            for msg in self.conversation_history:
+                history_data.append({
+                    "role": msg.role,
+                    "content": msg.content,
+                    "timestamp": msg.timestamp.isoformat(),
+                    "metadata": msg.metadata
+                })
+            with open(HISTORY_FILE, 'w') as f:
+                json.dump(history_data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to save conversation history: {e}")
+
+    def _load_history(self) -> None:
+        """Load conversation history from disk."""
+        try:
+            if HISTORY_FILE.exists():
+                with open(HISTORY_FILE, 'r') as f:
+                    history_data = json.load(f)
+                for item in history_data:
+                    msg = ConversationMessage(
+                        role=item["role"],
+                        content=item["content"],
+                        timestamp=datetime.fromisoformat(item["timestamp"]),
+                        metadata=item.get("metadata", {})
+                    )
+                    self.conversation_history.append(msg)
+                logger.info(f"Loaded {len(self.conversation_history)} messages from history")
+        except Exception as e:
+            logger.warning(f"Failed to load conversation history: {e}")
 
     def get_usage_stats(self) -> Dict[str, Any]:
         """Get API usage statistics."""
