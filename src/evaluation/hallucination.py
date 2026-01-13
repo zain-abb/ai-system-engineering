@@ -381,7 +381,7 @@ class HallucinationDetector(BaseEvaluator):
             issues.append(Issue(
                 severity=Severity.MEDIUM,
                 category="suspicious_api",
-                description=f"Potentially hallucinated API calls: {', '.join(set(suspicious_calls)[:5])}",
+                description=f"Potentially hallucinated API calls: {', '.join(list(set(suspicious_calls))[:5])}",
                 suggestion="Verify these API calls exist in the libraries being used"
             ))
 

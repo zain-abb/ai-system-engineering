@@ -1,0 +1,450 @@
+{
+  "version": "1.0",
+  "created": "2026-01-13",
+  "description": "SE-Agent Code Generation Evaluation Benchmark - 28 tasks across 5 categories",
+  "tasks": [
+    {
+      "task_id": "algo_001_factorial",
+      "category": "algorithms",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'factorial' that computes the factorial of a non-negative integer n. Return 1 for n=0 or n=1.",
+      "reference_output": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_zero", "code": "assert factorial(0) == 1", "expected": null},
+          {"name": "test_one", "code": "assert factorial(1) == 1", "expected": null},
+          {"name": "test_five", "code": "assert factorial(5) == 120", "expected": null},
+          {"name": "test_ten", "code": "assert factorial(10) == 3628800", "expected": null}
+        ],
+        "tags": ["recursion", "math"]
+      }
+    },
+    {
+      "task_id": "algo_002_fibonacci",
+      "category": "algorithms",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'fibonacci' that returns the nth Fibonacci number. Use 0-based indexing where fibonacci(0)=0, fibonacci(1)=1.",
+      "reference_output": "def fibonacci(n):\n    if n <= 0:\n        return 0\n    elif n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_zero", "code": "assert fibonacci(0) == 0", "expected": null},
+          {"name": "test_one", "code": "assert fibonacci(1) == 1", "expected": null},
+          {"name": "test_ten", "code": "assert fibonacci(10) == 55", "expected": null},
+          {"name": "test_twenty", "code": "assert fibonacci(20) == 6765", "expected": null}
+        ],
+        "tags": ["iteration", "math"]
+      }
+    },
+    {
+      "task_id": "algo_003_is_prime",
+      "category": "algorithms",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'is_prime' that returns True if a given positive integer n is prime, False otherwise. Numbers less than 2 are not prime.",
+      "reference_output": "def is_prime(n):\n    if n < 2:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n    for i in range(3, int(n**0.5) + 1, 2):\n        if n % i == 0:\n            return False\n    return True",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_one", "code": "assert is_prime(1) == False", "expected": null},
+          {"name": "test_two", "code": "assert is_prime(2) == True", "expected": null},
+          {"name": "test_seventeen", "code": "assert is_prime(17) == True", "expected": null},
+          {"name": "test_twenty", "code": "assert is_prime(20) == False", "expected": null}
+        ],
+        "tags": ["math", "optimization"]
+      }
+    },
+    {
+      "task_id": "algo_004_binary_search",
+      "category": "algorithms",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'binary_search' that takes a sorted list and a target value. Return the index of the target if found, or -1 if not found.",
+      "reference_output": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_found", "code": "assert binary_search([1, 2, 3, 4, 5], 3) == 2", "expected": null},
+          {"name": "test_not_found", "code": "assert binary_search([1, 2, 3, 4, 5], 6) == -1", "expected": null},
+          {"name": "test_first", "code": "assert binary_search([1, 2, 3, 4, 5], 1) == 0", "expected": null},
+          {"name": "test_empty", "code": "assert binary_search([], 1) == -1", "expected": null}
+        ],
+        "tags": ["search", "divide-and-conquer"]
+      }
+    },
+    {
+      "task_id": "algo_005_bubble_sort",
+      "category": "algorithms",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'bubble_sort' that sorts a list of numbers in ascending order using the bubble sort algorithm. Return the sorted list.",
+      "reference_output": "def bubble_sort(arr):\n    arr = arr.copy()\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n - i - 1):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n    return arr",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_unsorted", "code": "assert bubble_sort([64, 34, 25, 12, 22]) == [12, 22, 25, 34, 64]", "expected": null},
+          {"name": "test_sorted", "code": "assert bubble_sort([1, 2, 3]) == [1, 2, 3]", "expected": null},
+          {"name": "test_reverse", "code": "assert bubble_sort([5, 4, 3, 2, 1]) == [1, 2, 3, 4, 5]", "expected": null},
+          {"name": "test_empty", "code": "assert bubble_sort([]) == []", "expected": null}
+        ],
+        "tags": ["sorting"]
+      }
+    },
+    {
+      "task_id": "algo_006_merge_sort",
+      "category": "algorithms",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'merge_sort' that sorts a list of numbers in ascending order using the merge sort algorithm. Return the sorted list.",
+      "reference_output": "def merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\ndef merge(left, right):\n    result = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i])\n            i += 1\n        else:\n            result.append(right[j])\n            j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_unsorted", "code": "assert merge_sort([38, 27, 43, 3, 9, 82, 10]) == [3, 9, 10, 27, 38, 43, 82]", "expected": null},
+          {"name": "test_empty", "code": "assert merge_sort([]) == []", "expected": null},
+          {"name": "test_single", "code": "assert merge_sort([1]) == [1]", "expected": null}
+        ],
+        "tags": ["sorting", "divide-and-conquer", "recursion"]
+      }
+    },
+    {
+      "task_id": "algo_007_gcd",
+      "category": "algorithms",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'gcd' that computes the greatest common divisor of two positive integers using the Euclidean algorithm.",
+      "reference_output": "def gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_basic", "code": "assert gcd(48, 18) == 6", "expected": null},
+          {"name": "test_coprime", "code": "assert gcd(17, 13) == 1", "expected": null},
+          {"name": "test_same", "code": "assert gcd(10, 10) == 10", "expected": null},
+          {"name": "test_one", "code": "assert gcd(1, 100) == 1", "expected": null}
+        ],
+        "tags": ["math", "euclidean"]
+      }
+    },
+    {
+      "task_id": "algo_008_quicksort",
+      "category": "algorithms",
+      "difficulty": "hard",
+      "input_text": "Write a Python function called 'quicksort' that sorts a list of numbers in ascending order using the quicksort algorithm. Return the sorted list.",
+      "reference_output": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_unsorted", "code": "assert quicksort([3, 6, 8, 10, 1, 2, 1]) == [1, 1, 2, 3, 6, 8, 10]", "expected": null},
+          {"name": "test_empty", "code": "assert quicksort([]) == []", "expected": null},
+          {"name": "test_duplicates", "code": "assert quicksort([5, 5, 5, 5]) == [5, 5, 5, 5]", "expected": null}
+        ],
+        "tags": ["sorting", "divide-and-conquer", "recursion"]
+      }
+    },
+    {
+      "task_id": "ds_001_stack",
+      "category": "data_structures",
+      "difficulty": "easy",
+      "input_text": "Write a Python class called 'Stack' that implements a stack data structure with methods: push(item), pop(), peek(), is_empty(), and size().",
+      "reference_output": "class Stack:\n    def __init__(self):\n        self.items = []\n    \n    def push(self, item):\n        self.items.append(item)\n    \n    def pop(self):\n        if not self.is_empty():\n            return self.items.pop()\n        return None\n    \n    def peek(self):\n        if not self.is_empty():\n            return self.items[-1]\n        return None\n    \n    def is_empty(self):\n        return len(self.items) == 0\n    \n    def size(self):\n        return len(self.items)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_push_pop", "code": "s = Stack(); s.push(1); s.push(2); assert s.pop() == 2", "expected": null},
+          {"name": "test_peek", "code": "s = Stack(); s.push(1); assert s.peek() == 1", "expected": null},
+          {"name": "test_empty", "code": "s = Stack(); assert s.is_empty() == True", "expected": null},
+          {"name": "test_size", "code": "s = Stack(); s.push(1); s.push(2); assert s.size() == 2", "expected": null}
+        ],
+        "tags": ["stack", "class"]
+      }
+    },
+    {
+      "task_id": "ds_002_queue",
+      "category": "data_structures",
+      "difficulty": "easy",
+      "input_text": "Write a Python class called 'Queue' that implements a queue data structure with methods: enqueue(item), dequeue(), front(), is_empty(), and size().",
+      "reference_output": "class Queue:\n    def __init__(self):\n        self.items = []\n    \n    def enqueue(self, item):\n        self.items.append(item)\n    \n    def dequeue(self):\n        if not self.is_empty():\n            return self.items.pop(0)\n        return None\n    \n    def front(self):\n        if not self.is_empty():\n            return self.items[0]\n        return None\n    \n    def is_empty(self):\n        return len(self.items) == 0\n    \n    def size(self):\n        return len(self.items)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_enqueue_dequeue", "code": "q = Queue(); q.enqueue(1); q.enqueue(2); assert q.dequeue() == 1", "expected": null},
+          {"name": "test_front", "code": "q = Queue(); q.enqueue(1); assert q.front() == 1", "expected": null},
+          {"name": "test_empty", "code": "q = Queue(); assert q.is_empty() == True", "expected": null}
+        ],
+        "tags": ["queue", "class"]
+      }
+    },
+    {
+      "task_id": "ds_003_linked_list",
+      "category": "data_structures",
+      "difficulty": "medium",
+      "input_text": "Write a Python class called 'LinkedList' with a Node inner class. Implement methods: append(value), prepend(value), delete(value), find(value), and to_list().",
+      "reference_output": "class LinkedList:\n    class Node:\n        def __init__(self, value):\n            self.value = value\n            self.next = None\n    \n    def __init__(self):\n        self.head = None\n    \n    def append(self, value):\n        new_node = self.Node(value)\n        if not self.head:\n            self.head = new_node\n            return\n        current = self.head\n        while current.next:\n            current = current.next\n        current.next = new_node\n    \n    def prepend(self, value):\n        new_node = self.Node(value)\n        new_node.next = self.head\n        self.head = new_node\n    \n    def delete(self, value):\n        if not self.head:\n            return\n        if self.head.value == value:\n            self.head = self.head.next\n            return\n        current = self.head\n        while current.next:\n            if current.next.value == value:\n                current.next = current.next.next\n                return\n            current = current.next\n    \n    def find(self, value):\n        current = self.head\n        while current:\n            if current.value == value:\n                return True\n            current = current.next\n        return False\n    \n    def to_list(self):\n        result = []\n        current = self.head\n        while current:\n            result.append(current.value)\n            current = current.next\n        return result",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_append", "code": "ll = LinkedList(); ll.append(1); ll.append(2); assert ll.to_list() == [1, 2]", "expected": null},
+          {"name": "test_prepend", "code": "ll = LinkedList(); ll.append(2); ll.prepend(1); assert ll.to_list() == [1, 2]", "expected": null},
+          {"name": "test_find", "code": "ll = LinkedList(); ll.append(1); assert ll.find(1) == True", "expected": null},
+          {"name": "test_delete", "code": "ll = LinkedList(); ll.append(1); ll.append(2); ll.delete(1); assert ll.to_list() == [2]", "expected": null}
+        ],
+        "tags": ["linked-list", "class"]
+      }
+    },
+    {
+      "task_id": "ds_004_binary_tree",
+      "category": "data_structures",
+      "difficulty": "hard",
+      "input_text": "Write a Python class called 'BinarySearchTree' with methods: insert(value), search(value), inorder_traversal() that returns a list of values in order.",
+      "reference_output": "class BinarySearchTree:\n    class Node:\n        def __init__(self, value):\n            self.value = value\n            self.left = None\n            self.right = None\n    \n    def __init__(self):\n        self.root = None\n    \n    def insert(self, value):\n        if not self.root:\n            self.root = self.Node(value)\n        else:\n            self._insert_recursive(self.root, value)\n    \n    def _insert_recursive(self, node, value):\n        if value < node.value:\n            if node.left is None:\n                node.left = self.Node(value)\n            else:\n                self._insert_recursive(node.left, value)\n        else:\n            if node.right is None:\n                node.right = self.Node(value)\n            else:\n                self._insert_recursive(node.right, value)\n    \n    def search(self, value):\n        return self._search_recursive(self.root, value)\n    \n    def _search_recursive(self, node, value):\n        if node is None:\n            return False\n        if value == node.value:\n            return True\n        elif value < node.value:\n            return self._search_recursive(node.left, value)\n        else:\n            return self._search_recursive(node.right, value)\n    \n    def inorder_traversal(self):\n        result = []\n        self._inorder_recursive(self.root, result)\n        return result\n    \n    def _inorder_recursive(self, node, result):\n        if node:\n            self._inorder_recursive(node.left, result)\n            result.append(node.value)\n            self._inorder_recursive(node.right, result)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_insert_search", "code": "bst = BinarySearchTree(); bst.insert(5); bst.insert(3); bst.insert(7); assert bst.search(3) == True", "expected": null},
+          {"name": "test_not_found", "code": "bst = BinarySearchTree(); bst.insert(5); assert bst.search(10) == False", "expected": null},
+          {"name": "test_inorder", "code": "bst = BinarySearchTree(); bst.insert(5); bst.insert(3); bst.insert(7); assert bst.inorder_traversal() == [3, 5, 7]", "expected": null}
+        ],
+        "tags": ["tree", "recursion", "class"]
+      }
+    },
+    {
+      "task_id": "ds_005_hash_table",
+      "category": "data_structures",
+      "difficulty": "medium",
+      "input_text": "Write a Python class called 'HashTable' that implements a simple hash table with methods: put(key, value), get(key), remove(key), and contains(key).",
+      "reference_output": "class HashTable:\n    def __init__(self, size=10):\n        self.size = size\n        self.table = [[] for _ in range(size)]\n    \n    def _hash(self, key):\n        return hash(key) % self.size\n    \n    def put(self, key, value):\n        index = self._hash(key)\n        for i, (k, v) in enumerate(self.table[index]):\n            if k == key:\n                self.table[index][i] = (key, value)\n                return\n        self.table[index].append((key, value))\n    \n    def get(self, key):\n        index = self._hash(key)\n        for k, v in self.table[index]:\n            if k == key:\n                return v\n        return None\n    \n    def remove(self, key):\n        index = self._hash(key)\n        for i, (k, v) in enumerate(self.table[index]):\n            if k == key:\n                del self.table[index][i]\n                return True\n        return False\n    \n    def contains(self, key):\n        return self.get(key) is not None",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_put_get", "code": "ht = HashTable(); ht.put('a', 1); assert ht.get('a') == 1", "expected": null},
+          {"name": "test_contains", "code": "ht = HashTable(); ht.put('a', 1); assert ht.contains('a') == True", "expected": null},
+          {"name": "test_remove", "code": "ht = HashTable(); ht.put('a', 1); ht.remove('a'); assert ht.get('a') is None", "expected": null}
+        ],
+        "tags": ["hash-table", "class"]
+      }
+    },
+    {
+      "task_id": "str_001_reverse",
+      "category": "string_manipulation",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'reverse_string' that reverses a string without using the built-in reverse function or slicing with step -1.",
+      "reference_output": "def reverse_string(s):\n    result = ''\n    for char in s:\n        result = char + result\n    return result",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_basic", "code": "assert reverse_string('hello') == 'olleh'", "expected": null},
+          {"name": "test_empty", "code": "assert reverse_string('') == ''", "expected": null},
+          {"name": "test_single", "code": "assert reverse_string('a') == 'a'", "expected": null},
+          {"name": "test_palindrome", "code": "assert reverse_string('racecar') == 'racecar'", "expected": null}
+        ],
+        "tags": ["string", "iteration"]
+      }
+    },
+    {
+      "task_id": "str_002_palindrome",
+      "category": "string_manipulation",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'is_palindrome' that returns True if a string is a palindrome (ignoring case and spaces), False otherwise.",
+      "reference_output": "def is_palindrome(s):\n    cleaned = ''.join(c.lower() for c in s if c.isalnum())\n    return cleaned == cleaned[::-1]",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_palindrome", "code": "assert is_palindrome('racecar') == True", "expected": null},
+          {"name": "test_with_spaces", "code": "assert is_palindrome('A man a plan a canal Panama') == True", "expected": null},
+          {"name": "test_not_palindrome", "code": "assert is_palindrome('hello') == False", "expected": null},
+          {"name": "test_empty", "code": "assert is_palindrome('') == True", "expected": null}
+        ],
+        "tags": ["string", "palindrome"]
+      }
+    },
+    {
+      "task_id": "str_003_anagram",
+      "category": "string_manipulation",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'is_anagram' that returns True if two strings are anagrams of each other (ignoring case and spaces), False otherwise.",
+      "reference_output": "def is_anagram(s1, s2):\n    clean1 = ''.join(c.lower() for c in s1 if c.isalnum())\n    clean2 = ''.join(c.lower() for c in s2 if c.isalnum())\n    return sorted(clean1) == sorted(clean2)",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_anagram", "code": "assert is_anagram('listen', 'silent') == True", "expected": null},
+          {"name": "test_not_anagram", "code": "assert is_anagram('hello', 'world') == False", "expected": null},
+          {"name": "test_with_spaces", "code": "assert is_anagram('Dormitory', 'Dirty room') == True", "expected": null}
+        ],
+        "tags": ["string", "anagram"]
+      }
+    },
+    {
+      "task_id": "str_004_word_count",
+      "category": "string_manipulation",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'word_count' that takes a string and returns a dictionary with the count of each word (case-insensitive).",
+      "reference_output": "def word_count(s):\n    words = s.lower().split()\n    count = {}\n    for word in words:\n        word = ''.join(c for c in word if c.isalnum())\n        if word:\n            count[word] = count.get(word, 0) + 1\n    return count",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_basic", "code": "assert word_count('hello world hello') == {'hello': 2, 'world': 1}", "expected": null},
+          {"name": "test_empty", "code": "assert word_count('') == {}", "expected": null},
+          {"name": "test_case", "code": "assert word_count('Hello HELLO') == {'hello': 2}", "expected": null}
+        ],
+        "tags": ["string", "dictionary"]
+      }
+    },
+    {
+      "task_id": "str_005_compress",
+      "category": "string_manipulation",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'compress_string' that performs basic string compression using counts of repeated characters. For example, 'aabcccccaaa' becomes 'a2b1c5a3'. If the compressed string is not smaller, return the original.",
+      "reference_output": "def compress_string(s):\n    if not s:\n        return s\n    compressed = []\n    count = 1\n    for i in range(1, len(s)):\n        if s[i] == s[i-1]:\n            count += 1\n        else:\n            compressed.append(s[i-1] + str(count))\n            count = 1\n    compressed.append(s[-1] + str(count))\n    result = ''.join(compressed)\n    return result if len(result) < len(s) else s",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_compress", "code": "assert compress_string('aabcccccaaa') == 'a2b1c5a3'", "expected": null},
+          {"name": "test_no_compress", "code": "assert compress_string('abc') == 'abc'", "expected": null},
+          {"name": "test_empty", "code": "assert compress_string('') == ''", "expected": null}
+        ],
+        "tags": ["string", "compression"]
+      }
+    },
+    {
+      "task_id": "file_001_json_parse",
+      "category": "file_api",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'parse_json_safely' that takes a JSON string and returns the parsed object. If the JSON is invalid, return None instead of raising an exception.",
+      "reference_output": "import json\n\ndef parse_json_safely(json_str):\n    try:\n        return json.loads(json_str)\n    except (json.JSONDecodeError, TypeError):\n        return None",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_valid", "code": "assert parse_json_safely('{\"a\": 1}') == {'a': 1}", "expected": null},
+          {"name": "test_invalid", "code": "assert parse_json_safely('not json') is None", "expected": null},
+          {"name": "test_array", "code": "assert parse_json_safely('[1, 2, 3]') == [1, 2, 3]", "expected": null}
+        ],
+        "tags": ["json", "error-handling"]
+      }
+    },
+    {
+      "task_id": "file_002_csv_parse",
+      "category": "file_api",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'parse_csv_line' that takes a CSV line string and returns a list of values. Handle basic quoted fields containing commas.",
+      "reference_output": "def parse_csv_line(line):\n    import csv\n    from io import StringIO\n    reader = csv.reader(StringIO(line))\n    return next(reader, [])",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_simple", "code": "assert parse_csv_line('a,b,c') == ['a', 'b', 'c']", "expected": null},
+          {"name": "test_quoted", "code": "assert parse_csv_line('a,\"b,c\",d') == ['a', 'b,c', 'd']", "expected": null},
+          {"name": "test_empty", "code": "assert parse_csv_line('') == []", "expected": null}
+        ],
+        "tags": ["csv", "parsing"]
+      }
+    },
+    {
+      "task_id": "file_003_read_write",
+      "category": "file_api",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'count_lines' that takes a filename and returns the number of lines in the file. Return -1 if the file doesn't exist.",
+      "reference_output": "def count_lines(filename):\n    try:\n        with open(filename, 'r') as f:\n            return sum(1 for _ in f)\n    except FileNotFoundError:\n        return -1",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_not_found", "code": "assert count_lines('nonexistent_file_xyz.txt') == -1", "expected": null}
+        ],
+        "tags": ["file-io", "error-handling"]
+      }
+    },
+    {
+      "task_id": "file_004_http_status",
+      "category": "file_api",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'get_status_description' that takes an HTTP status code and returns its description. Support codes: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Server Error. Return 'Unknown' for other codes.",
+      "reference_output": "def get_status_description(code):\n    status_codes = {\n        200: 'OK',\n        201: 'Created',\n        400: 'Bad Request',\n        401: 'Unauthorized',\n        403: 'Forbidden',\n        404: 'Not Found',\n        500: 'Internal Server Error'\n    }\n    return status_codes.get(code, 'Unknown')",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_200", "code": "assert get_status_description(200) == 'OK'", "expected": null},
+          {"name": "test_404", "code": "assert get_status_description(404) == 'Not Found'", "expected": null},
+          {"name": "test_unknown", "code": "assert get_status_description(999) == 'Unknown'", "expected": null}
+        ],
+        "tags": ["http", "dictionary"]
+      }
+    },
+    {
+      "task_id": "err_001_safe_divide",
+      "category": "error_handling",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'safe_divide' that divides two numbers and returns the result. Return None if division by zero occurs or if inputs are not numbers.",
+      "reference_output": "def safe_divide(a, b):\n    try:\n        return a / b\n    except (ZeroDivisionError, TypeError):\n        return None",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_normal", "code": "assert safe_divide(10, 2) == 5.0", "expected": null},
+          {"name": "test_zero", "code": "assert safe_divide(10, 0) is None", "expected": null},
+          {"name": "test_type_error", "code": "assert safe_divide('a', 2) is None", "expected": null}
+        ],
+        "tags": ["error-handling", "math"]
+      }
+    },
+    {
+      "task_id": "err_002_validate_email",
+      "category": "error_handling",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'validate_email' that returns True if the input is a valid email format (contains @ and . after @), False otherwise. Do not use regex.",
+      "reference_output": "def validate_email(email):\n    if not isinstance(email, str):\n        return False\n    if '@' not in email:\n        return False\n    parts = email.split('@')\n    if len(parts) != 2:\n        return False\n    local, domain = parts\n    if not local or not domain:\n        return False\n    if '.' not in domain:\n        return False\n    return True",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_valid", "code": "assert validate_email('test@example.com') == True", "expected": null},
+          {"name": "test_no_at", "code": "assert validate_email('testexample.com') == False", "expected": null},
+          {"name": "test_no_dot", "code": "assert validate_email('test@example') == False", "expected": null},
+          {"name": "test_empty", "code": "assert validate_email('') == False", "expected": null}
+        ],
+        "tags": ["validation", "string"]
+      }
+    },
+    {
+      "task_id": "err_003_parse_int",
+      "category": "error_handling",
+      "difficulty": "easy",
+      "input_text": "Write a Python function called 'parse_int_safely' that converts a string to an integer. Return a default value (0) if conversion fails.",
+      "reference_output": "def parse_int_safely(s, default=0):\n    try:\n        return int(s)\n    except (ValueError, TypeError):\n        return default",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_valid", "code": "assert parse_int_safely('42') == 42", "expected": null},
+          {"name": "test_invalid", "code": "assert parse_int_safely('abc') == 0", "expected": null},
+          {"name": "test_none", "code": "assert parse_int_safely(None) == 0", "expected": null},
+          {"name": "test_custom_default", "code": "assert parse_int_safely('abc', -1) == -1", "expected": null}
+        ],
+        "tags": ["error-handling", "parsing"]
+      }
+    },
+    {
+      "task_id": "algo_009_two_sum",
+      "category": "algorithms",
+      "difficulty": "medium",
+      "input_text": "Write a Python function called 'two_sum' that takes a list of integers and a target sum. Return a list of two indices whose values add up to the target. Return an empty list if no solution exists.",
+      "reference_output": "def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_found", "code": "assert two_sum([2, 7, 11, 15], 9) == [0, 1]", "expected": null},
+          {"name": "test_not_found", "code": "assert two_sum([1, 2, 3], 10) == []", "expected": null},
+          {"name": "test_duplicates", "code": "result = two_sum([3, 3], 6); assert result == [0, 1]", "expected": null}
+        ],
+        "tags": ["hash-map", "array"]
+      }
+    },
+    {
+      "task_id": "algo_010_max_subarray",
+      "category": "algorithms",
+      "difficulty": "hard",
+      "input_text": "Write a Python function called 'max_subarray_sum' that finds the contiguous subarray with the largest sum and returns that sum. Use Kadane's algorithm.",
+      "reference_output": "def max_subarray_sum(nums):\n    if not nums:\n        return 0\n    max_sum = current_sum = nums[0]\n    for num in nums[1:]:\n        current_sum = max(num, current_sum + num)\n        max_sum = max(max_sum, current_sum)\n    return max_sum",
+      "language": "python",
+      "metadata": {
+        "test_cases": [
+          {"name": "test_mixed", "code": "assert max_subarray_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6", "expected": null},
+          {"name": "test_all_negative", "code": "assert max_subarray_sum([-1, -2, -3]) == -1", "expected": null},
+          {"name": "test_single", "code": "assert max_subarray_sum([5]) == 5", "expected": null},
+          {"name": "test_empty", "code": "assert max_subarray_sum([]) == 0", "expected": null}
+        ],
+        "tags": ["dynamic-programming", "array"]
+      }
+    }
+  ]
+}

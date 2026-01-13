@@ -77,9 +77,23 @@ class EvaluationResult:
             "critical_count": self.critical_count,
             "high_count": self.high_count,
             "issues": [i.to_dict() for i in self.issues],
-            "details": self.details,
+            "details": self._serialize_details(self.details),
             "timestamp": self.timestamp.isoformat()
         }
+
+    def _serialize_details(self, obj: Any) -> Any:
+        """Recursively serialize details dict, converting Issue objects."""
+        if isinstance(obj, Issue):
+            return obj.to_dict()
+        elif isinstance(obj, dict):
+            return {k: self._serialize_details(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [self._serialize_details(item) for item in obj]
+        elif isinstance(obj, Severity):
+            return obj.value
+        elif isinstance(obj, datetime):
+            return obj.isoformat()
+        return obj
 
 
 @dataclass

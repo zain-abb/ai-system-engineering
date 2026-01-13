@@ -21,8 +21,8 @@ COPY data/ ./data/
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
-# Expose ports (FastAPI: 8000, Gradio: 7860)
-EXPOSE 8000 7860
+# Expose port for FastAPI
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

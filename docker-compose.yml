@@ -1,14 +1,28 @@
 version: '3.8'
 
 services:
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: se-agent-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - se-agent
+    restart: unless-stopped
+    networks:
+      - se-agent-network
+
+  # FastAPI Backend
   se-agent:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: se-agent-app
     ports:
-      - "8000:8000"  # FastAPI
-      - "7860:7860"  # Gradio
+      - "8000:8000"
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - CHROMA_HOST=chromadb
@@ -25,6 +39,7 @@ services:
     networks:
       - se-agent-network
 
+  # Vector Database
   chromadb:
     image: chromadb/chroma:latest
     container_name: se-agent-chromadb

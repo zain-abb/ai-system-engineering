@@ -11,10 +11,12 @@ An AI-powered virtual agent that assists software engineers with code generation
 - **Documentation**: Generate API docs, README files, and inline documentation
 - **RAG Support**: Index your codebase for context-aware generation
 - **Evaluation Framework**: Assess generated code for quality metrics
+- **Modern React UI**: Beautiful, responsive web interface with dark mode
 
 ## Prerequisites
 
 - Python 3.11+
+- Node.js 18+ (for frontend development)
 - Anthropic API key
 - Docker & Docker Compose (optional, for containerized deployment)
 
@@ -27,19 +29,25 @@ git clone <repository-url>
 cd project
 ```
 
-### 2. Create Virtual Environment
+### 2. Backend Setup
 
 ```bash
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 # or
 venv\Scripts\activate  # Windows
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### 3. Install Dependencies
+### 3. Frontend Setup
 
 ```bash
-pip install -r requirements.txt
+cd frontend
+npm install
+cd ..
 ```
 
 ### 4. Configure Environment Variables
@@ -56,46 +64,25 @@ ANTHROPIC_API_KEY=your-api-key-here
 
 ## Running the Application
 
-### Option 1: FastAPI Server
+### Option 1: Development Mode (Recommended for Development)
 
-Start the REST API server:
+Start both the backend and frontend in separate terminals:
 
+**Terminal 1 - Backend:**
 ```bash
 python -m src.main
 ```
 
-The API will be available at `http://localhost:8000`
-
-**API Endpoints:**
-- `GET /health` - Health check
-- `POST /generate` - Auto-detect task and generate response
-- `POST /code/generate` - Generate code from requirements
-- `POST /tests/generate` - Generate tests for code
-- `POST /code/review` - Review code for issues
-- `POST /rag/index` - Index a codebase
-- `POST /rag/search` - Search indexed code
-- `GET /usage` - Get API usage statistics
-
-### Option 2: Gradio Web UI
-
-Launch the web interface:
-
+**Terminal 2 - Frontend:**
 ```bash
-python -m src.ui.gradio_app
+cd frontend
+npm run dev
 ```
 
-Open `http://localhost:7860` in your browser.
+- Backend API: `http://localhost:8000`
+- Frontend UI: `http://localhost:5173`
 
-**Available Tabs:**
-- **Auto Mode**: Enter any request, agent auto-detects the task
-- **Code Generation**: Generate code from requirements
-- **Test Generation**: Generate tests for your code
-- **Code Review**: Get code review feedback
-- **Requirements**: Analyze software requirements
-- **Documentation**: Generate documentation
-- **Evaluate Code**: Run quality evaluation on code
-
-### Option 3: Command-Line Interface
+### Option 2: Command-Line Interface
 
 The CLI provides quick access to all features:
 
@@ -131,28 +118,65 @@ python -m src.ui.cli usage
 python -m src.ui.cli batch-evaluate dataset.json -o report.json
 ```
 
-### Option 4: Docker Deployment
+### Option 3: Docker Deployment (Production)
 
 Build and run with Docker Compose:
 
 ```bash
-# Start all services (SE-Agent + ChromaDB)
+# Start all services (Frontend + Backend + ChromaDB)
 docker-compose up --build
 
 # Run in background
 docker-compose up -d --build
 
 # View logs
-docker-compose logs -f se-agent
+docker-compose logs -f
 
 # Stop services
 docker-compose down
 ```
 
 Services will be available at:
-- FastAPI: `http://localhost:8000`
-- Gradio UI: `http://localhost:7860`
+- Frontend UI: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
 - ChromaDB: `http://localhost:8001`
+
+## Web Interface Features
+
+The React-based web interface includes:
+
+- **Dashboard**: Overview with quick actions, usage stats, and system status
+- **Code Generation**: Generate code from natural language requirements
+- **Test Generation**: Create unit tests with framework selection
+- **Code Review**: Get detailed code review with focus areas
+- **Requirements Analysis**: Analyze and structure requirements
+- **Documentation**: Generate API docs, README, and inline comments
+- **Evaluation**: Check code for correctness, robustness, safety, and hallucination
+- **Settings**: Manage RAG indexing, view usage stats, and clear history
+
+### UI Features
+- Dark/Light mode toggle
+- Syntax-highlighted code editor
+- Real-time loading states
+- Toast notifications for errors/success
+- Responsive design for all screen sizes
+- Collapsible sidebar navigation
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check and capabilities |
+| `/generate` | POST | Auto-detect task and generate |
+| `/code/generate` | POST | Generate code from requirements |
+| `/tests/generate` | POST | Generate tests for code |
+| `/code/review` | POST | Review code for issues |
+| `/usage` | GET | API usage statistics |
+| `/history` | GET | Conversation history |
+| `/history` | DELETE | Clear history |
+| `/rag/index` | POST | Index a codebase |
+| `/rag/stats` | GET | RAG system statistics |
+| `/rag/search` | POST | Search indexed code |
 
 ## Usage Examples
 
@@ -178,13 +202,6 @@ response = agent.generate_tests(
 )
 print(response.result)
 
-# Code review
-response = agent.review_code(
-    code="your code here",
-    focus="security"
-)
-print(response.result)
-
 # Auto-detect intent
 response = agent.process(
     user_input="Write unit tests for this authentication module",
@@ -197,7 +214,7 @@ print(response.result)
 ### Evaluation Framework
 
 ```python
-from src.evaluation import quick_evaluate, EvaluationPipeline
+from src.evaluation import quick_evaluate, generate_evaluation_report
 
 # Quick evaluation
 result = quick_evaluate(
@@ -210,17 +227,6 @@ print(f"Passed: {result.overall_passed}")
 
 for eval_type, eval_result in result.results.items():
     print(f"{eval_type.value}: {eval_result.score:.2f}")
-
-# Batch evaluation
-from src.evaluation import generate_evaluation_report
-
-tasks = [
-    {"prompt": "Write a sorting function", "code": "def sort(arr): ..."},
-    {"prompt": "Write a search function", "code": "def search(arr, x): ..."},
-]
-
-report = generate_evaluation_report(tasks, output_path="report.json")
-print(f"Pass rate: {report.summary['pass_rate']:.1%}")
 ```
 
 ### REST API
@@ -238,11 +244,6 @@ curl -X POST http://localhost:8000/code/generate \
 curl -X POST http://localhost:8000/tests/generate \
   -H "Content-Type: application/json" \
   -d '{"code": "def add(a, b): return a + b", "framework": "pytest"}'
-
-# Auto-detect and generate
-curl -X POST http://localhost:8000/generate \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Review this code for security issues: def login(user, pwd): ..."}'
 ```
 
 ## Evaluation Metrics
@@ -256,10 +257,112 @@ The evaluation framework assesses generated code across four dimensions:
 | **Safety** | Free from vulnerabilities | SQL injection, XSS, command injection, hardcoded secrets |
 | **Hallucination** | No made-up APIs/imports | Invalid imports, fake functions, incorrect signatures |
 
+## Running Experiments
+
+The project includes a comprehensive experiment framework for empirical evaluation of LLM code generation quality.
+
+### Benchmark Dataset
+
+The benchmark dataset (`data/evaluation/benchmark_dataset.json`) contains 27 coding tasks across 5 categories:
+
+| Category | Tasks | Description |
+|----------|-------|-------------|
+| Algorithms | 10 | Sorting, searching, recursion, dynamic programming |
+| Data Structures | 5 | Stack, queue, linked list, BST, hash table |
+| String Manipulation | 5 | Parsing, validation, compression |
+| File/API | 4 | JSON parsing, CSV handling, HTTP utilities |
+| Error Handling | 3 | Safe operations, validation, parsing |
+
+### Running an Experiment
+
+```bash
+# Run full experiment (evaluates all 27 tasks)
+python -m experiments.run_experiment
+
+# Quick test with limited tasks
+python -m experiments.run_experiment --max-tasks 5
+
+# Filter by category
+python -m experiments.run_experiment --categories algorithms data_structures
+
+# Filter by difficulty
+python -m experiments.run_experiment --difficulties easy medium
+
+# Custom output directory
+python -m experiments.run_experiment --output experiments/my_results
+```
+
+### Analyzing Results
+
+```bash
+# Print detailed analysis report
+python -m experiments.analyze experiments/results/exp_*/raw_results.json
+
+# Export to CSV
+python -m experiments.analyze experiments/results/exp_*/raw_results.json --csv results.csv
+
+# Export analysis to JSON
+python -m experiments.analyze experiments/results/exp_*/raw_results.json --json analysis.json
+```
+
+### Generating Visualizations
+
+```bash
+# Generate all plots
+python -m experiments.visualize experiments/results/exp_*/raw_results.json
+
+# Custom output directory
+python -m experiments.visualize experiments/results/exp_*/raw_results.json --output plots/
+```
+
+Generated visualizations include:
+- `score_distribution.png` - Box plots of scores per evaluator
+- `pass_rates.png` - Bar chart of pass rates by evaluator
+- `category_performance.png` - Performance breakdown by task category
+- `difficulty_analysis.png` - Scores vs difficulty level
+- `issue_breakdown.png` - Issues by severity per evaluator
+- `correlation_heatmap.png` - Correlations between evaluator scores
+
+### Experiment Output Structure
+
+```
+experiments/results/exp_YYYYMMDD_HHMMSS/
+├── config.json              # Experiment configuration & environment
+├── raw_results.json         # Full task-by-task results
+├── evaluation_report.json   # Detailed evaluation data
+├── summary.json             # Aggregated statistics
+├── checkpoints/             # Intermediate saves for resumability
+└── plots/                   # Generated visualizations
+    ├── score_distribution.png
+    ├── pass_rates.png
+    ├── category_performance.png
+    ├── difficulty_analysis.png
+    ├── issue_breakdown.png
+    └── correlation_heatmap.png
+```
+
+### Reproducing Experiments
+
+For full reproducibility, each experiment saves:
+- Git commit hash
+- Python and library versions
+- Dataset SHA-256 hash
+- Full configuration parameters
+- Timestamped results
+
 ## Project Structure
 
 ```
 project/
+├── frontend/                    # React + ShadCN UI
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   ├── pages/              # Page components
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── lib/                # Utilities and API client
+│   │   └── types/              # TypeScript types
+│   ├── package.json
+│   └── Dockerfile
 ├── src/
 │   ├── main.py                 # FastAPI entry point
 │   ├── config.py               # Configuration management
@@ -286,12 +389,19 @@ project/
 │   ├── services/
 │   │   └── claude_client.py    # Anthropic API wrapper
 │   └── ui/
-│       ├── gradio_app.py       # Web interface
 │       └── cli.py              # Command-line interface
+├── experiments/                 # Experiment framework
+│   ├── config.py               # Experiment configuration
+│   ├── runner.py               # Experiment runner
+│   ├── analyze.py              # Results analysis
+│   ├── visualize.py            # Visualization generation
+│   ├── run_experiment.py       # CLI entry point
+│   └── results/                # Experiment outputs
 ├── data/
-│   └── evaluation/             # Evaluation datasets
-├── reports/                    # Generated reports
-├── tests/                      # Unit tests
+│   └── evaluation/
+│       └── benchmark_dataset.json  # 27 coding tasks
+├── doc/
+│   └── workflow.md             # Architecture documentation
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
@@ -321,39 +431,25 @@ CHROMA_PORT=8001
 # Optional - Server
 APP_HOST=0.0.0.0
 APP_API_PORT=8000
-APP_GRADIO_PORT=7860
 ```
 
-## Testing
+## Technology Stack
 
-Run the test suite:
+### Backend
+- **FastAPI** - High-performance Python web framework
+- **Anthropic Claude API** - LLM for code generation and analysis
+- **ChromaDB** - Vector database for RAG
+- **sentence-transformers** - Local embeddings
 
-```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ -v --cov=src --cov-report=html
-
-# Run specific test file
-pytest tests/test_evaluation.py -v
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Frontend
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Utility-first styling
+- **ShadCN UI** - Component library (Radix primitives)
+- **TanStack Query** - Data fetching and caching
+- **React Router** - Client-side routing
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Built with [Anthropic Claude API](https://www.anthropic.com/)
-- Vector storage powered by [ChromaDB](https://www.trychroma.com/)
-- Web UI built with [Gradio](https://gradio.app/)
-- CLI powered by [Click](https://click.palletsprojects.com/) and [Rich](https://rich.readthedocs.io/)

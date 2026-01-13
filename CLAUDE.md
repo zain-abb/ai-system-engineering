@@ -33,7 +33,7 @@ mypy src/
 ## Architecture
 
 ```
-USER INTERFACE (FastAPI + Gradio)
+USER INTERFACE (FastAPI + React Frontend)
             |
     ORCHESTRATION (Agent Controller)
             |
@@ -55,7 +55,7 @@ USER INTERFACE (FastAPI + Gradio)
 - `src/capabilities/` - Code gen, test gen, review, requirements, docs modules
 - `src/rag/` - Code indexer, vector store, retriever
 - `src/evaluation/` - Quality evaluators (correctness, robustness, safety, hallucination)
-- `src/ui/` - Gradio web UI and CLI interface
+- `src/ui/` - CLI interface
 
 ## Key APIs
 
@@ -83,8 +83,8 @@ Required in `.env`:
 # Start all services
 docker-compose up --build
 
-# API available at http://localhost:8000
-# Gradio UI at http://localhost:7860
+# Frontend UI at http://localhost:3000
+# Backend API at http://localhost:8000
 # ChromaDB at http://localhost:8001
 ```
 

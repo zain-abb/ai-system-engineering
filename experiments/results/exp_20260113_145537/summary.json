@@ -1,0 +1,73 @@
+{
+  "total_tasks": 27,
+  "passed_tasks": 25,
+  "failed_tasks": 2,
+  "pass_rate": 0.9259259259259259,
+  "average_overall_score": 0.9048734860228386,
+  "evaluator_stats": {
+    "correctness": {
+      "average_score": 0.7776808595361528,
+      "min_score": 0.6810109289617486,
+      "max_score": 0.83125,
+      "pass_rate": 0.9259259259259259,
+      "total_issues": 4,
+      "severity_breakdown": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "info": 0
+      }
+    },
+    "robustness": {
+      "average_score": 0.9259259259259259,
+      "min_score": 0.7777777777777778,
+      "max_score": 1.0,
+      "pass_rate": 1.0,
+      "total_issues": 18,
+      "severity_breakdown": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 6,
+        "info": 12
+      }
+    },
+    "safety": {
+      "average_score": 0.9944444444444445,
+      "min_score": 0.85,
+      "max_score": 1.0,
+      "pass_rate": 1.0,
+      "total_issues": 1,
+      "severity_breakdown": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0,
+        "info": 0
+      }
+    },
+    "hallucination": {
+      "average_score": 0.9944444444444445,
+      "min_score": 0.85,
+      "max_score": 1.0,
+      "pass_rate": 1.0,
+      "total_issues": 1,
+      "severity_breakdown": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0,
+        "info": 0
+      }
+    }
+  },
+  "top_issue_categories": {
+    "no_error_handling": 12,
+    "no_null_handling": 6,
+    "test_failure": 4,
+    "suspicious_api": 1,
+    "dangerous_imports": 1
+  },
+  "total_issues_found": 24
+}

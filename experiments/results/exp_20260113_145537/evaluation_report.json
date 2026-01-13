@@ -1,0 +1,4236 @@
+{
+  "summary": {
+    "total_tasks": 27,
+    "passed_tasks": 25,
+    "failed_tasks": 2,
+    "pass_rate": 0.9259259259259259,
+    "average_overall_score": 0.9048734860228386,
+    "evaluator_stats": {
+      "correctness": {
+        "average_score": 0.7776808595361528,
+        "min_score": 0.6810109289617486,
+        "max_score": 0.83125,
+        "pass_rate": 0.9259259259259259,
+        "total_issues": 4,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 4,
+          "low": 0,
+          "info": 0
+        }
+      },
+      "robustness": {
+        "average_score": 0.9259259259259259,
+        "min_score": 0.7777777777777778,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 18,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 6,
+          "info": 12
+        }
+      },
+      "safety": {
+        "average_score": 0.9944444444444445,
+        "min_score": 0.85,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 1,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 1,
+          "low": 0,
+          "info": 0
+        }
+      },
+      "hallucination": {
+        "average_score": 0.9944444444444445,
+        "min_score": 0.85,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 1,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 1,
+          "low": 0,
+          "info": 0
+        }
+      }
+    },
+    "top_issue_categories": {
+      "no_error_handling": 12,
+      "no_null_handling": 6,
+      "test_failure": 4,
+      "suspicious_api": 1,
+      "dangerous_imports": 1
+    },
+    "total_issues_found": 24
+  },
+  "task_count": 27,
+  "tasks": [
+    {
+      "task_id": "algo_001_factorial",
+      "input_text": "Write a Python function called 'factorial' that computes the factorial of a non-negative integer n. Return 1 for n=0 or n=1.",
+      "generated_output": "def factorial(n: int) -> int:\n    \"\"\"\n    Compute the factorial of a non-negative integer n.\n    \n    The factorial of n (denoted as n!) is the product of all positive integers\n    less than or equal to n. By definition, 0! = 1 and 1! = 1.\n    \n    Args:\n        n: A non-negative integer\n        \n    Returns:\n        The factorial of n\n        \n    Raises:\n        ValueError: If n is negative\n        TypeError: If n is not an integer\n    \"\"\"\n    if not isinstance(n, int):\n        raise TypeError...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7694805194805194,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.07792207792207792
+          },
+          "timestamp": "2026-01-13T14:58:32.016008"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.016070"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpth5kgo40.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 23,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 23,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.134428"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.134756"
+        }
+      },
+      "overall_score": 0.9193181818181817,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.134769"
+    },
+    {
+      "task_id": "algo_002_fibonacci",
+      "input_text": "Write a Python function called 'fibonacci' that returns the nth Fibonacci number. Use 0-based indexing where fibonacci(0)=0, fibonacci(1)=1.",
+      "generated_output": "def fibonacci(n: int) -> int:\n    \"\"\"\n    Calculate the nth Fibonacci number using 0-based indexing.\n    \n    Args:\n        n: The position in the Fibonacci sequence (0-based)\n        \n    Returns:\n        The nth Fibonacci number\n        \n    Raises:\n        ValueError: If n is negative\n        \n    Examples:\n        >>> fibonacci(0)\n        0\n        >>> fibonacci(1)\n        1\n        >>> fibonacci(5)\n        5\n        >>> fibonacci(10)\n        55\n    \"\"\"\n    if n < 0:\n        raise ValueError...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8090277777777778,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.2361111111111111
+          },
+          "timestamp": "2026-01-13T14:58:32.177440"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.177514"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpt1gx374k.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 27,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 27,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.251219"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.251352"
+        }
+      },
+      "overall_score": 0.9109375,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.251365"
+    },
+    {
+      "task_id": "algo_003_is_prime",
+      "input_text": "Write a Python function called 'is_prime' that returns True if a given positive integer n is prime, False otherwise. Numbers less than 2 are not prime.",
+      "generated_output": "def is_prime(n: int) -> bool:\n    \"\"\"\n    Check if a given positive integer is prime.\n    \n    A prime number is a natural number greater than 1 that has no positive\n    divisors other than 1 and itself.\n    \n    Args:\n        n: The positive integer to check for primality\n        \n    Returns:\n        True if n is prime, False otherwise\n        \n    Examples:\n        >>> is_prime(2)\n        True\n        >>> is_prime(4)\n        False\n        >>> is_prime(17)\n        True\n        >>> is_prime(1)\n...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8188405797101449,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.2753623188405797
+          },
+          "timestamp": "2026-01-13T14:58:32.292047"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 2,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            },
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.3333333333333333,
+              "checks_passed": 1,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                },
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.292103"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpl0qm2mu1.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 29,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 29,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.367002"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.367131"
+        }
+      },
+      "overall_score": 0.8921497584541063,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.367142"
+    },
+    {
+      "task_id": "algo_004_binary_search",
+      "input_text": "Write a Python function called 'binary_search' that takes a sorted list and a target value. Return the index of the target if found, or -1 if not found.",
+      "generated_output": "from typing import List, Union\n\ndef binary_search(arr: List[Union[int, float]], target: Union[int, float]) -> int:\n    \"\"\"\n    Perform binary search on a sorted list to find the target value.\n    \n    Args:\n        arr: A sorted list of comparable elements (integers or floats)\n        target: The value to search for in the list\n        \n    Returns:\n        The index of the target value if found, otherwise -1\n        \n    Time Complexity: O(log n)\n    Space Complexity: O(1)\n    \"\"\"\n    if not ar...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.796,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "Index of 7: 3\nIndex of 1: 0\nIndex of 15: 7\nIndex of 4: -1\nEmpty list: -1\nSingle element found: 0\nSingle element not found: -1\n"
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.184
+          },
+          "timestamp": "2026-01-13T14:58:32.434026"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.434104"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmph06os2n_.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 34,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 34,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.513090"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.513435"
+        }
+      },
+      "overall_score": 0.9063777777777777,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.513450"
+    },
+    {
+      "task_id": "algo_005_bubble_sort",
+      "input_text": "Write a Python function called 'bubble_sort' that sorts a list of numbers in ascending order using the bubble sort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List, Union\n\ndef bubble_sort(numbers: List[Union[int, float]]) -> List[Union[int, float]]:\n    \"\"\"\n    Sort a list of numbers in ascending order using the bubble sort algorithm.\n    \n    The bubble sort algorithm repeatedly steps through the list, compares adjacent\n    elements and swaps them if they are in the wrong order. The pass through the\n    list is repeated until the list is sorted.\n    \n    Args:\n        numbers: A list of integers or floats to be sorted\n        \n    ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.778125,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.1125
+          },
+          "timestamp": "2026-01-13T14:58:32.576483"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.576560"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpexpjbyiy.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 37,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 37,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.651634"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.651921"
+        }
+      },
+      "overall_score": 0.92234375,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.651937"
+    },
+    {
+      "task_id": "algo_006_merge_sort",
+      "input_text": "Write a Python function called 'merge_sort' that sorts a list of numbers in ascending order using the merge sort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List\n\n\ndef merge_sort(arr: List[float]) -> List[float]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the merge sort algorithm.\n    \n    Args:\n        arr: A list of numbers to be sorted\n        \n    Returns:\n        A new list containing the sorted numbers in ascending order\n        \n    Time Complexity: O(n log n)\n    Space Complexity: O(n)\n    \"\"\"\n    if len(arr) <= 1:\n        return arr.copy()\n    \n    # Divide the array into two halves\n    mid = len(arr) //...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8026315789473684,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.21052631578947367
+          },
+          "timestamp": "2026-01-13T14:58:32.705757"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 2,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            },
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.3333333333333333,
+              "checks_passed": 1,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                },
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.705830"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp7truil4q.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 42,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 42,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.800043"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.800380"
+        }
+      },
+      "overall_score": 0.8864766081871345,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.800395"
+    },
+    {
+      "task_id": "algo_007_gcd",
+      "input_text": "Write a Python function called 'gcd' that computes the greatest common divisor of two positive integers using the Euclidean algorithm.",
+      "generated_output": "def gcd(a: int, b: int) -> int:\n    \"\"\"\n    Compute the greatest common divisor of two positive integers using the Euclidean algorithm.\n    \n    The Euclidean algorithm is based on the principle that the GCD of two numbers\n    does not change if the larger number is replaced by its difference with the smaller number.\n    \n    Args:\n        a (int): First positive integer\n        b (int): Second positive integer\n        \n    Returns:\n        int: The greatest common divisor of a and b\n        \n  ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7792553191489362,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.11702127659574468
+          },
+          "timestamp": "2026-01-13T14:58:32.854097"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.854164"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:32Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpqe3amyat.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 27,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 27,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.936609"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.936755"
+        }
+      },
+      "overall_score": 0.9227393617021276,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:32.936767"
+    },
+    {
+      "task_id": "algo_008_quicksort",
+      "input_text": "Write a Python function called 'quicksort' that sorts a list of numbers in ascending order using the quicksort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List\n\n\ndef quicksort(arr: List[float]) -> List[float]:\n    \"\"\"\n    Sort a list of numbers in ascending order using the quicksort algorithm.\n    \n    Args:\n        arr: List of numbers to be sorted\n        \n    Returns:\n        A new list containing the sorted numbers in ascending order\n        \n    Examples:\n        >>> quicksort([3, 6, 8, 10, 1, 2, 1])\n        [1, 1, 2, 3, 6, 8, 10]\n        >>> quicksort([])\n        []\n        >>> quicksort([42])\n        [42]\n    \"\"\"\n    if l...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7850467289719626,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.14018691588785046
+          },
+          "timestamp": "2026-01-13T14:58:32.995204"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 2,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            },
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.3333333333333333,
+              "checks_passed": 1,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                },
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:32.995267"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp6kgkpzcy.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 31,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 31,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.077473"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.077686"
+        }
+      },
+      "overall_score": 0.8803219106957425,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.077699"
+    },
+    {
+      "task_id": "ds_001_stack",
+      "input_text": "Write a Python class called 'Stack' that implements a stack data structure with methods: push(item), pop(), peek(), is_empty(), and size().",
+      "generated_output": "from typing import Any, Optional\n\n\nclass Stack:\n    \"\"\"\n    A stack data structure implementation using a list.\n    \n    Supports standard stack operations: push, pop, peek, is_empty, and size.\n    Follows LIFO (Last In, First Out) principle.\n    \"\"\"\n    \n    def __init__(self) -> None:\n        \"\"\"Initialize an empty stack.\"\"\"\n        self._items: list[Any] = []\n    \n    def push(self, item: Any) -> None:\n        \"\"\"\n        Add an item to the top of the stack.\n        \n        Args:\n           ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7725409836065574,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.09016393442622951
+          },
+          "timestamp": "2026-01-13T14:58:33.146179"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.146251"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpd_4e9ptx.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 59,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 59,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.224793"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.225090"
+        }
+      },
+      "overall_score": 0.920389344262295,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.225106"
+    },
+    {
+      "task_id": "ds_002_queue",
+      "input_text": "Write a Python class called 'Queue' that implements a queue data structure with methods: enqueue(item), dequeue(), front(), is_empty(), and size().",
+      "generated_output": "from typing import Any, Optional\nfrom collections import deque\n\n\nclass Queue:\n    \"\"\"\n    A queue data structure implementation using collections.deque for efficient operations.\n    \n    Follows FIFO (First In, First Out) principle where items are added to the rear\n    and removed from the front of the queue.\n    \"\"\"\n    \n    def __init__(self) -> None:\n        \"\"\"Initialize an empty queue.\"\"\"\n        self._items: deque = deque()\n    \n    def enqueue(self, item: Any) -> None:\n        \"\"\"\n       ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7693798449612403,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.07751937984496124
+          },
+          "timestamp": "2026-01-13T14:58:33.282614"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.282698"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmptg_mg0ke.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 68,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 68,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.360051"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 2,
+              "valid_imports": [
+                "typing",
+                "collections"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.360377"
+        }
+      },
+      "overall_score": 0.919282945736434,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.360394"
+    },
+    {
+      "task_id": "ds_003_linked_list",
+      "input_text": "Write a Python class called 'LinkedList' with a Node inner class. Implement methods: append(value), prepend(value), delete(value), find(value), and to_list().",
+      "generated_output": "from typing import Any, Optional, List\n\n\nclass LinkedList:\n    \"\"\"A singly linked list implementation with basic operations.\"\"\"\n    \n    class Node:\n        \"\"\"Inner class representing a node in the linked list.\"\"\"\n        \n        def __init__(self, value: Any) -> None:\n            \"\"\"Initialize a node with the given value.\n            \n            Args:\n                value: The value to store in the node\n            \"\"\"\n            self.value = value\n            self.next: Optional['LinkedLi...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7573529411764706,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "test_failure",
+              "description": "Test failed: test_find",
+              "location": null,
+              "suggestion": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpqcr31"
+            }
+          ],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 3,
+              "failed": 1,
+              "pass_rate": 0.75,
+              "failed_tests": [
+                {
+                  "name": "test_find",
+                  "error": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpqcr31ss1.py\", line 118, in <module>\n    ll = LinkedList(); ll.append(1); assert ll.find(1) == True\n      "
+                }
+              ]
+            },
+            "similarity": 0.27941176470588236
+          },
+          "timestamp": "2026-01-13T14:58:33.432771"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.432873"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpogqug_g8.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 90,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 90,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.512565"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.513129"
+        }
+      },
+      "overall_score": 0.8928513071895425,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.513150"
+    },
+    {
+      "task_id": "ds_004_binary_tree",
+      "input_text": "Write a Python class called 'BinarySearchTree' with methods: insert(value), search(value), inorder_traversal() that returns a list of values in order.",
+      "generated_output": "from typing import List, Optional\n\n\nclass TreeNode:\n    \"\"\"A node in the binary search tree.\"\"\"\n    \n    def __init__(self, value: int) -> None:\n        \"\"\"Initialize a tree node with the given value.\n        \n        Args:\n            value: The integer value to store in this node\n        \"\"\"\n        self.value = value\n        self.left: Optional['TreeNode'] = None\n        self.right: Optional['TreeNode'] = None\n\n\nclass BinarySearchTree:\n    \"\"\"A binary search tree implementation with insert, s...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8157894736842105,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "Search for 40: True\nSearch for 25: False\nInorder traversal: [20, 30, 40, 50, 60, 70, 80]\n"
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.2631578947368421
+          },
+          "timestamp": "2026-01-13T14:58:33.568109"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.568226"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpzhpmth9i.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 91,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 91,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.647795"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.648416"
+        }
+      },
+      "overall_score": 0.9133040935672514,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.648438"
+    },
+    {
+      "task_id": "ds_005_hash_table",
+      "input_text": "Write a Python class called 'HashTable' that implements a simple hash table with methods: put(key, value), get(key), remove(key), and contains(key).",
+      "generated_output": "from typing import Any, Optional, List, Tuple\n\n\nclass HashTable:\n    \"\"\"\n    A simple hash table implementation using separate chaining for collision resolution.\n    \n    This hash table uses Python lists to store key-value pairs in buckets,\n    with each bucket containing a list of (key, value) tuples.\n    \"\"\"\n    \n    def __init__(self, initial_capacity: int = 16) -> None:\n        \"\"\"\n        Initialize the hash table with a given capacity.\n        \n        Args:\n            initial_capacity: ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.6993670886075949,
+          "passed": false,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "test_failure",
+              "description": "Test failed: test_remove",
+              "location": null,
+              "suggestion": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpyfcv_"
+            }
+          ],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 2,
+              "failed": 1,
+              "pass_rate": 0.6666666666666666,
+              "failed_tests": [
+                {
+                  "name": "test_remove",
+                  "error": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpyfcv_yie.py\", line 205, in <module>\n    ht = HashTable(); ht.put('a', 1); ht.remove('a'); assert ht.get('"
+                }
+              ]
+            },
+            "similarity": 0.1308016877637131
+          },
+          "timestamp": "2026-01-13T14:58:33.705081"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.705240"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpeo92nbpo.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 156,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 156,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.805488"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.806726"
+        }
+      },
+      "overall_score": 0.8947784810126582,
+      "overall_passed": false,
+      "timestamp": "2026-01-13T14:58:33.806769"
+    },
+    {
+      "task_id": "str_001_reverse",
+      "input_text": "Write a Python function called 'reverse_string' that reverses a string without using the built-in reverse function or slicing with step -1.",
+      "generated_output": "def reverse_string(s: str) -> str:\n    \"\"\"\n    Reverses a string without using built-in reverse function or slicing with step -1.\n    \n    Args:\n        s (str): The input string to be reversed\n        \n    Returns:\n        str: The reversed string\n        \n    Raises:\n        TypeError: If input is not a string\n    \"\"\"\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string\")\n    \n    if len(s) <= 1:\n        return s\n    \n    # Convert string to list for efficient charact...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7637614678899083,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "'hello' -> 'olleh'\n'world' -> 'dlrow'\n'a' -> 'a'\n'' -> ''\n'racecar' -> 'racecar'\n'Python programming' -> 'gnimmargorp nohtyP'\n"
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.05504587155963303
+          },
+          "timestamp": "2026-01-13T14:58:33.859403"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.859474"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:33Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp64b52h0m.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 34,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 34,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.945827"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.946056"
+        }
+      },
+      "overall_score": 0.9173165137614678,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:33.946070"
+    },
+    {
+      "task_id": "str_002_palindrome",
+      "input_text": "Write a Python function called 'is_palindrome' that returns True if a string is a palindrome (ignoring case and spaces), False otherwise.",
+      "generated_output": "def is_palindrome(s: str) -> bool:\n    \"\"\"\n    Check if a string is a palindrome, ignoring case and spaces.\n    \n    Args:\n        s: The string to check for palindrome property\n        \n    Returns:\n        True if the string is a palindrome, False otherwise\n        \n    Examples:\n        >>> is_palindrome(\"racecar\")\n        True\n        >>> is_palindrome(\"A man a plan a canal Panama\")\n        True\n        >>> is_palindrome(\"race a car\")\n        False\n        >>> is_palindrome(\"\")\n        True\n...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.778169014084507,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.11267605633802817
+          },
+          "timestamp": "2026-01-13T14:58:33.995670"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:33.995730"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpm3houn2i.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 21,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 21,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.081325"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.081440"
+        }
+      },
+      "overall_score": 0.9223591549295773,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.081453"
+    },
+    {
+      "task_id": "str_003_anagram",
+      "input_text": "Write a Python function called 'is_anagram' that returns True if two strings are anagrams of each other (ignoring case and spaces), False otherwise.",
+      "generated_output": "def is_anagram(str1: str, str2: str) -> bool:\n    \"\"\"\n    Check if two strings are anagrams of each other.\n    \n    An anagram is a word or phrase formed by rearranging the letters of another,\n    using all the original letters exactly once. This function ignores case and spaces.\n    \n    Args:\n        str1 (str): First string to compare\n        str2 (str): Second string to compare\n    \n    Returns:\n        bool: True if the strings are anagrams, False otherwise\n    \n    Examples:\n        >>> is...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7632575757575758,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.05303030303030303
+          },
+          "timestamp": "2026-01-13T14:58:34.120714"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.120801"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp7mlcb5gj.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 31,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 31,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.246314"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.246916"
+        }
+      },
+      "overall_score": 0.8949179292929292,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.246957"
+    },
+    {
+      "task_id": "str_004_word_count",
+      "input_text": "Write a Python function called 'word_count' that takes a string and returns a dictionary with the count of each word (case-insensitive).",
+      "generated_output": "def word_count(text: str) -> dict[str, int]:\n    \"\"\"\n    Count the occurrences of each word in a string (case-insensitive).\n    \n    Args:\n        text: The input string to analyze\n        \n    Returns:\n        A dictionary with words as keys and their counts as values\n        \n    Example:\n        >>> word_count(\"Hello world hello\")\n        {'hello': 2, 'world': 1}\n    \"\"\"\n    if not text:\n        return {}\n    \n    # Convert to lowercase and split into words\n    words = text.lower().split()\n  ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.79375,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.175
+          },
+          "timestamp": "2026-01-13T14:58:34.299342"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.299426"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpgjooxyph.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.383869"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.384011"
+        }
+      },
+      "overall_score": 0.9055902777777778,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.384026"
+    },
+    {
+      "task_id": "str_005_compress",
+      "input_text": "Write a Python function called 'compress_string' that performs basic string compression using counts of repeated characters. For example, 'aabcccccaaa' becomes 'a2b1c5a3'. If the compressed string is ...",
+      "generated_output": "def compress_string(s: str) -> str:\n    \"\"\"\n    Performs basic string compression using counts of repeated characters.\n    \n    Args:\n        s: The input string to compress\n        \n    Returns:\n        The compressed string if it's shorter than the original, otherwise the original string\n        \n    Examples:\n        >>> compress_string('aabcccccaaa')\n        'a2b1c5a3'\n        >>> compress_string('abc')\n        'abc'\n        >>> compress_string('')\n        ''\n    \"\"\"\n    if not s:\n        re...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.83125,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.325
+          },
+          "timestamp": "2026-01-13T14:58:34.419008"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.419075"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpc4az8d6p.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 30,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 30,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.496608"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.496851"
+        }
+      },
+      "overall_score": 0.9187152777777778,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.496867"
+    },
+    {
+      "task_id": "file_001_json_parse",
+      "input_text": "Write a Python function called 'parse_json_safely' that takes a JSON string and returns the parsed object. If the JSON is invalid, return None instead of raising an exception.",
+      "generated_output": "import json\nfrom typing import Any, Optional\n\n\ndef parse_json_safely(json_string: str) -> Optional[Any]:\n    \"\"\"\n    Safely parse a JSON string and return the parsed object.\n    \n    Args:\n        json_string: A string containing JSON data to be parsed\n        \n    Returns:\n        The parsed JSON object (dict, list, str, int, float, bool, or None)\n        if parsing succeeds, otherwise None if the JSON is invalid\n        \n    Examples:\n        >>> parse_json_safely('{\"name\": \"John\", \"age\": 30}'...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7763157894736842,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.10526315789473684
+          },
+          "timestamp": "2026-01-13T14:58:34.553468"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.553520"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp__e3yn66.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 26,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 26,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.630344"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 0.85,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "suspicious_api",
+              "description": "Potentially hallucinated API calls: parse_json_safely(",
+              "location": null,
+              "suggestion": "Verify these API calls exist in the libraries being used"
+            }
+          ],
+          "details": {
+            "imports": {
+              "total_imports": 2,
+              "valid_imports": [
+                "json",
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [
+                "parse_json_safely("
+              ],
+              "issues": [
+                {
+                  "severity": "medium",
+                  "category": "suspicious_api",
+                  "description": "Potentially hallucinated API calls: parse_json_safely(",
+                  "location": null,
+                  "suggestion": "Verify these API calls exist in the libraries being used"
+                }
+              ]
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 1,
+              "import_issues": 0,
+              "api_issues": 1,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.630483"
+        }
+      },
+      "overall_score": 0.8917105263157895,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.630494"
+    },
+    {
+      "task_id": "file_002_csv_parse",
+      "input_text": "Write a Python function called 'parse_csv_line' that takes a CSV line string and returns a list of values. Handle basic quoted fields containing commas.",
+      "generated_output": "import csv\nfrom typing import List\n\n\ndef parse_csv_line(line: str) -> List[str]:\n    \"\"\"\n    Parse a single CSV line string and return a list of field values.\n    \n    Handles basic quoted fields containing commas, following standard CSV rules:\n    - Fields containing commas must be enclosed in double quotes\n    - Double quotes within quoted fields are escaped by doubling them\n    - Leading/trailing whitespace is preserved within quoted fields\n    - Empty fields are returned as empty strings\n   ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.6810109289617486,
+          "passed": false,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "test_failure",
+              "description": "Test failed: test_empty",
+              "location": null,
+              "suggestion": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp9zsmc"
+            }
+          ],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 2,
+              "failed": 1,
+              "pass_rate": 0.6666666666666666,
+              "failed_tests": [
+                {
+                  "name": "test_empty",
+                  "error": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp9zsmc_6p.py\", line 43, in <module>\n    assert parse_csv_line('') == []\n           ^^^^^^^^^^^^^^^^^^^^^^^"
+                }
+              ]
+            },
+            "similarity": 0.05737704918032787
+          },
+          "timestamp": "2026-01-13T14:58:34.690556"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.690611"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp1do6mpyb.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 30,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 30,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.767158"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 2,
+              "valid_imports": [
+                "csv",
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.767302"
+        }
+      },
+      "overall_score": 0.8883538251366121,
+      "overall_passed": false,
+      "timestamp": "2026-01-13T14:58:34.767315"
+    },
+    {
+      "task_id": "file_003_read_write",
+      "input_text": "Write a Python function called 'count_lines' that takes a filename and returns the number of lines in the file. Return -1 if the file doesn't exist.",
+      "generated_output": "import os\nfrom typing import Union\n\n\ndef count_lines(filename: str) -> int:\n    \"\"\"\n    Count the number of lines in a file.\n    \n    Args:\n        filename: Path to the file to count lines in\n        \n    Returns:\n        Number of lines in the file, or -1 if the file doesn't exist\n        \n    Raises:\n        None - errors are handled by returning -1\n    \"\"\"\n    if not os.path.exists(filename):\n        return -1\n    \n    try:\n        with open(filename, 'r', encoding='utf-8') as file:\n        ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7954545454545454,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 1,
+              "passed": 1,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.18181818181818182
+          },
+          "timestamp": "2026-01-13T14:58:34.793980"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.794033"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 0.85,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "dangerous_imports",
+              "description": "Potentially dangerous imports: os",
+              "location": null,
+              "suggestion": "Review if these imports are necessary and used safely"
+            }
+          ],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpi_hkmdll.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [
+                {
+                  "severity": "medium",
+                  "category": "dangerous_imports",
+                  "description": "Potentially dangerous imports: os",
+                  "location": null,
+                  "suggestion": "Review if these imports are necessary and used safely"
+                }
+              ],
+              "findings": {
+                "dangerous_imports": [
+                  "os"
+                ],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 1,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 1,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.870000"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 2,
+              "valid_imports": [
+                "os",
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.870144"
+        }
+      },
+      "overall_score": 0.8909090909090909,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.870155"
+    },
+    {
+      "task_id": "file_004_http_status",
+      "input_text": "Write a Python function called 'get_status_description' that takes an HTTP status code and returns its description. Support codes: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden...",
+      "generated_output": "def get_status_description(status_code: int) -> str:\n    \"\"\"\n    Returns the description for a given HTTP status code.\n    \n    Args:\n        status_code (int): The HTTP status code to get the description for.\n        \n    Returns:\n        str: The description of the HTTP status code, or 'Unknown' if the \n             status code is not supported.\n    \"\"\"\n    status_descriptions = {\n        200: \"OK\",\n        201: \"Created\",\n        400: \"Bad Request\",\n        401: \"Unauthorized\",\n        403: \"...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.795774647887324,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.18309859154929578
+          },
+          "timestamp": "2026-01-13T14:58:34.905971"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.906024"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:34Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpuv7dvoog.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 19,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 19,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.983203"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:34.983296"
+        }
+      },
+      "overall_score": 0.9062989045383412,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:34.983309"
+    },
+    {
+      "task_id": "err_001_safe_divide",
+      "input_text": "Write a Python function called 'safe_divide' that divides two numbers and returns the result. Return None if division by zero occurs or if inputs are not numbers.",
+      "generated_output": "from typing import Union, Optional\n\ndef safe_divide(dividend: Union[int, float], divisor: Union[int, float]) -> Optional[float]:\n    \"\"\"\n    Safely divides two numbers and returns the result.\n    \n    Args:\n        dividend: The number to be divided (numerator)\n        divisor: The number to divide by (denominator)\n    \n    Returns:\n        The result of dividend/divisor as a float, or None if division by zero\n        occurs or if inputs are not numbers.\n    \n    Examples:\n        >>> safe_divid...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.764367816091954,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.05747126436781609
+          },
+          "timestamp": "2026-01-13T14:58:35.037807"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.037872"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:35Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpagxc5d7d.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 25,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 25,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.118102"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.118261"
+        }
+      },
+      "overall_score": 0.8953065134099616,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:35.118273"
+    },
+    {
+      "task_id": "err_002_validate_email",
+      "input_text": "Write a Python function called 'validate_email' that returns True if the input is a valid email format (contains @ and . after @), False otherwise. Do not use regex.",
+      "generated_output": "def validate_email(email: str) -> bool:\n    \"\"\"\n    Validates if the input string is a valid email format.\n    \n    A valid email must:\n    - Contain exactly one '@' symbol\n    - Have at least one character before the '@'\n    - Have at least one '.' after the '@'\n    - Have at least one character before and after the '.'\n    \n    Args:\n        email (str): The email string to validate\n        \n    Returns:\n        bool: True if email format is valid, False otherwise\n    \"\"\"\n    if not isinstance...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8017241379310345,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.20689655172413793
+          },
+          "timestamp": "2026-01-13T14:58:35.162828"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.162909"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:35Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp58drvmnt.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 32,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 32,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.239908"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.240100"
+        }
+      },
+      "overall_score": 0.9083812260536399,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:35.240114"
+    },
+    {
+      "task_id": "err_003_parse_int",
+      "input_text": "Write a Python function called 'parse_int_safely' that converts a string to an integer. Return a default value (0) if conversion fails.",
+      "generated_output": "def parse_int_safely(value: str, default: int = 0) -> int:\n    \"\"\"\n    Safely converts a string to an integer with error handling.\n    \n    Args:\n        value: The string value to convert to an integer\n        default: The default value to return if conversion fails (defaults to 0)\n    \n    Returns:\n        The integer value if conversion succeeds, otherwise the default value\n    \n    Examples:\n        >>> parse_int_safely(\"123\")\n        123\n        >>> parse_int_safely(\"abc\")\n        0\n       ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7836538461538461,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.1346153846153846
+          },
+          "timestamp": "2026-01-13T14:58:35.284276"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.284327"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:35Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp26x_wn1u.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 20,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.362243"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.362340"
+        }
+      },
+      "overall_score": 0.9020566239316239,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:35.362352"
+    },
+    {
+      "task_id": "algo_009_two_sum",
+      "input_text": "Write a Python function called 'two_sum' that takes a list of integers and a target sum. Return a list of two indices whose values add up to the target. Return an empty list if no solution exists.",
+      "generated_output": "from typing import List, Dict\n\n\ndef two_sum(nums: List[int], target: int) -> List[int]:\n    \"\"\"\n    Find two indices in the list whose values add up to the target sum.\n    \n    Args:\n        nums: List of integers to search through\n        target: Target sum to find\n        \n    Returns:\n        List containing two indices whose values sum to target,\n        or empty list if no solution exists\n        \n    Time Complexity: O(n)\n    Space Complexity: O(n)\n    \"\"\"\n    if not nums or len(nums) < 2:...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8074712643678161,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.22988505747126436
+          },
+          "timestamp": "2026-01-13T14:58:35.414341"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.414398"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:35Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp_fxe4ooz.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 22,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 22,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.490276"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.490456"
+        }
+      },
+      "overall_score": 0.9103927203065134,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:35.490467"
+    },
+    {
+      "task_id": "algo_010_max_subarray",
+      "input_text": "Write a Python function called 'max_subarray_sum' that finds the contiguous subarray with the largest sum and returns that sum. Use Kadane's algorithm.",
+      "generated_output": "from typing import List\n\n\ndef max_subarray_sum(nums: List[int]) -> int:\n    \"\"\"\n    Find the contiguous subarray with the largest sum using Kadane's algorithm.\n    \n    Kadane's algorithm works by maintaining two variables:\n    - current_sum: the maximum sum ending at the current position\n    - max_sum: the maximum sum found so far\n    \n    Args:\n        nums: A list of integers\n        \n    Returns:\n        The maximum sum of any contiguous subarray\n        \n    Raises:\n        ValueError: If t...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7085843373493976,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "medium",
+              "category": "test_failure",
+              "description": "Test failed: test_empty",
+              "location": null,
+              "suggestion": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpn3e11"
+            }
+          ],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "max_subarray_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4]) = 6\nmax_subarray_sum([5]) = 5\nmax_subarray_sum([-5, -2, -8, -1]) = -1\nmax_subarray_sum([1, 2, 3, 4, 5]) = 15\nmax_subarray_sum([5, -3, 2, -1, 4]) = 7\n"
+            },
+            "tests": {
+              "total": 4,
+              "passed": 3,
+              "failed": 1,
+              "pass_rate": 0.75,
+              "failed_tests": [
+                {
+                  "name": "test_empty",
+                  "error": "Traceback (most recent call last):\n  File \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmpn3e116bq.py\", line 69, in <module>\n    assert max_subarray_sum([]) == 0\n           ^^^^^^^^^^^^^^^^^^^^\n "
+                }
+              ]
+            },
+            "similarity": 0.08433734939759036
+          },
+          "timestamp": "2026-01-13T14:58:35.555316"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.555391"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": true,
+              "issues": [],
+              "raw_output": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-01-13T13:58:35Z\",\n  \"metrics\": {\n    \"/var/folders/mh/10bt1ptd6n320wv3jjt7l50c0000gn/T/tmp1_ymssrx.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 40,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 40,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}"
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.633209"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-13T14:58:35.633549"
+        }
+      },
+      "overall_score": 0.8980045180722891,
+      "overall_passed": true,
+      "timestamp": "2026-01-13T14:58:35.633567"
+    }
+  ],
+  "timestamp": "2026-01-13T14:58:35.633628"
+}

@@ -1,0 +1,295 @@
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Loader2, FolderOpen, Trash2, Database, History } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
+import { useToast } from '@/hooks/use-toast'
+import { api } from '@/lib/api'
+
+export default function Settings() {
+  const [indexDirectory, setIndexDirectory] = useState('')
+  const [extensions, setExtensions] = useState('.py, .js, .ts')
+  const { toast } = useToast()
+  const queryClient = useQueryClient()
+
+  const { data: usage } = useQuery({
+    queryKey: ['usage'],
+    queryFn: api.getUsage,
+  })
+
+  const { data: ragStats } = useQuery({
+    queryKey: ['ragStats'],
+    queryFn: api.getRagStats,
+  })
+
+  const { data: history } = useQuery({
+    queryKey: ['history'],
+    queryFn: api.getHistory,
+  })
+
+  const indexMutation = useMutation({
+    mutationFn: api.indexCodebase,
+    onSuccess: (data) => {
+      toast({
+        title: 'Indexing Complete',
+        description: `Indexed ${data.chunks_indexed} chunks from ${data.directory}`,
+      })
+      queryClient.invalidateQueries({ queryKey: ['ragStats'] })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Indexing Failed',
+        description: error.message,
+      })
+    },
+  })
+
+  const clearHistoryMutation = useMutation({
+    mutationFn: api.clearHistory,
+    onSuccess: () => {
+      toast({
+        title: 'History Cleared',
+        description: 'Conversation history has been cleared.',
+      })
+      queryClient.invalidateQueries({ queryKey: ['history'] })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to Clear History',
+        description: error.message,
+      })
+    },
+  })
+
+  const handleIndex = () => {
+    if (!indexDirectory.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing Directory',
+        description: 'Please enter a directory path to index.',
+      })
+      return
+    }
+
+    const extList = extensions
+      .split(',')
+      .map((e) => e.trim())
+      .filter((e) => e)
+
+    indexMutation.mutate({
+      directory: indexDirectory,
+      extensions: extList.length > 0 ? extList : undefined,
+    })
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
+        <p className="text-muted-foreground">
+          Configure the SE-Agent and manage resources
+        </p>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* RAG Indexing */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Database className="h-5 w-5" />
+              RAG Index
+            </CardTitle>
+            <CardDescription>
+              Index your codebase for context-aware generation
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="directory">Directory Path</Label>
+              <Textarea
+                id="directory"
+                placeholder="/path/to/your/codebase"
+                value={indexDirectory}
+                onChange={(e) => setIndexDirectory(e.target.value)}
+                className="min-h-[60px]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="extensions">File Extensions (comma-separated)</Label>
+              <Textarea
+                id="extensions"
+                placeholder=".py, .js, .ts"
+                value={extensions}
+                onChange={(e) => setExtensions(e.target.value)}
+                className="min-h-[40px]"
+              />
+            </div>
+
+            <Button
+              onClick={handleIndex}
+              disabled={indexMutation.isPending}
+              className="w-full"
+            >
+              {indexMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Indexing...
+                </>
+              ) : (
+                <>
+                  <FolderOpen className="mr-2 h-4 w-4" />
+                  Index Codebase
+                </>
+              )}
+            </Button>
+
+            <Separator />
+
+            {/* RAG Stats */}
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Index Status</p>
+              {ragStats?.total_chunks !== undefined ? (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Indexed Chunks</span>
+                    <span className="font-medium">{ragStats.total_chunks}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Indexed Files</span>
+                    <span className="font-medium">{ragStats.indexed_files || 0}</span>
+                  </div>
+                  <Progress value={ragStats.total_chunks ? 100 : 0} className="h-2" />
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No codebase indexed yet</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Usage Stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle>API Usage</CardTitle>
+            <CardDescription>
+              Your API usage statistics
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Total Requests</p>
+                <p className="text-2xl font-bold">
+                  {usage?.total_requests?.toLocaleString() || 0}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Total Cost</p>
+                <p className="text-2xl font-bold">
+                  ${usage?.total_cost?.toFixed(4) || '0.0000'}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Input Tokens</p>
+                <p className="text-lg font-semibold">
+                  {usage?.input_tokens?.toLocaleString() || 0}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Output Tokens</p>
+                <p className="text-lg font-semibold">
+                  {usage?.output_tokens?.toLocaleString() || 0}
+                </p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Total Tokens</p>
+              <p className="text-lg font-semibold">
+                {usage?.total_tokens?.toLocaleString() || 0}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Conversation History */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <History className="h-5 w-5" />
+                  Conversation History
+                </CardTitle>
+                <CardDescription>
+                  {history?.length || 0} messages in history
+                </CardDescription>
+              </div>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => clearHistoryMutation.mutate()}
+                disabled={clearHistoryMutation.isPending || !history?.length}
+              >
+                {clearHistoryMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Clear History
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {history && history.length > 0 ? (
+              <div className="space-y-2 max-h-[300px] overflow-auto">
+                {history.slice(0, 10).map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
+                  >
+                    <span
+                      className={`text-xs font-medium px-2 py-1 rounded ${
+                        item.role === 'user'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-secondary text-secondary-foreground'
+                      }`}
+                    >
+                      {item.role}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm truncate">{item.content}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(item.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {history.length > 10 && (
+                  <p className="text-sm text-muted-foreground text-center py-2">
+                    And {history.length - 10} more messages...
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-8">
+                No conversation history yet
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
