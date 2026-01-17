@@ -33,12 +33,12 @@
 \contentsline {subsection}{\numberline {7.2}Per-Evaluator Results}{15}{subsection.7.2}%
 \contentsline {subsection}{\numberline {7.3}Issue Analysis}{15}{subsection.7.3}%
 \contentsline {subsection}{\numberline {7.4}Visualizations}{16}{subsection.7.4}%
-\contentsline {section}{\numberline {8}Discussion}{19}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Key Findings}{19}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Architecture Trade-offs}{19}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Strengths}{19}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Limitations}{20}{subsection.8.4}%
-\contentsline {subsection}{\numberline {8.5}Lessons Learned}{20}{subsection.8.5}%
-\contentsline {section}{\numberline {9}Conclusion and Future Work}{20}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Summary of Contributions}{20}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Future Work}{21}{subsection.9.2}%
+\contentsline {section}{\numberline {8}Discussion}{21}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Key Findings}{21}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Architecture Trade-offs}{22}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Strengths}{22}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Limitations}{22}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Lessons Learned}{22}{subsection.8.5}%
+\contentsline {section}{\numberline {9}Conclusion and Future Work}{23}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Summary of Contributions}{23}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Future Work}{23}{subsection.9.2}%
