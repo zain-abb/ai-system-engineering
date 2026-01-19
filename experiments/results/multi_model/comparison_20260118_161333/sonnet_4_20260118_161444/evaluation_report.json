@@ -1,0 +1,1587 @@
+{
+  "summary": {
+    "total_tasks": 10,
+    "passed_tasks": 10,
+    "failed_tasks": 0,
+    "pass_rate": 1.0,
+    "average_overall_score": 0.9101661556006564,
+    "evaluator_stats": {
+      "correctness": {
+        "average_score": 0.787776317589177,
+        "min_score": 0.7654320987654321,
+        "max_score": 0.8188405797101449,
+        "pass_rate": 1.0,
+        "total_issues": 0,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0,
+          "info": 0
+        }
+      },
+      "robustness": {
+        "average_score": 0.9222222222222222,
+        "min_score": 0.7777777777777778,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 7,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 3,
+          "info": 4
+        }
+      },
+      "safety": {
+        "average_score": 1.0,
+        "min_score": 1.0,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 0,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0,
+          "info": 0
+        }
+      },
+      "hallucination": {
+        "average_score": 1.0,
+        "min_score": 1.0,
+        "max_score": 1.0,
+        "pass_rate": 1.0,
+        "total_issues": 0,
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0,
+          "info": 0
+        }
+      }
+    },
+    "top_issue_categories": {
+      "no_error_handling": 4,
+      "no_null_handling": 3
+    },
+    "total_issues_found": 7
+  },
+  "task_count": 10,
+  "tasks": [
+    {
+      "task_id": "algo_001_factorial",
+      "input_text": "Write a Python function called 'factorial' that computes the factorial of a non-negative integer n. Return 1 for n=0 or n=1.",
+      "generated_output": "def factorial(n: int) -> int:\n    \"\"\"\n    Compute the factorial of a non-negative integer n.\n    \n    The factorial of n (denoted as n!) is the product of all positive integers\n    less than or equal to n. By definition, 0! = 1 and 1! = 1.\n    \n    Args:\n        n: A non-negative integer to compute the factorial for\n        \n    Returns:\n        The factorial of n as an integer\n        \n    Raises:\n        ValueError: If n is negative\n        TypeError: If n is not an integer\n    \"\"\"\n    if not ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.76875,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.075
+          },
+          "timestamp": "2026-01-18T16:15:53.394040"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.394129"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.396741"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.396927"
+        }
+      },
+      "overall_score": 0.9190624999999999,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.396942"
+    },
+    {
+      "task_id": "algo_002_fibonacci",
+      "input_text": "Write a Python function called 'fibonacci' that returns the nth Fibonacci number. Use 0-based indexing where fibonacci(0)=0, fibonacci(1)=1.",
+      "generated_output": "def fibonacci(n: int) -> int:\n    \"\"\"\n    Calculate the nth Fibonacci number using 0-based indexing.\n    \n    Args:\n        n: The index of the Fibonacci number to calculate (non-negative integer)\n        \n    Returns:\n        The nth Fibonacci number where fibonacci(0)=0 and fibonacci(1)=1\n        \n    Raises:\n        ValueError: If n is negative\n        \n    Examples:\n        >>> fibonacci(0)\n        0\n        >>> fibonacci(1)\n        1\n        >>> fibonacci(5)\n        5\n        >>> fibonacci(...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.80625,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.225
+          },
+          "timestamp": "2026-01-18T16:15:53.442511"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.442594"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.444909"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.445068"
+        }
+      },
+      "overall_score": 0.9099652777777778,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.445078"
+    },
+    {
+      "task_id": "algo_003_is_prime",
+      "input_text": "Write a Python function called 'is_prime' that returns True if a given positive integer n is prime, False otherwise. Numbers less than 2 are not prime.",
+      "generated_output": "def is_prime(n: int) -> bool:\n    \"\"\"\n    Check if a given positive integer is prime.\n    \n    A prime number is a natural number greater than 1 that has no positive\n    divisors other than 1 and itself.\n    \n    Args:\n        n: The positive integer to check for primality\n        \n    Returns:\n        True if n is prime, False otherwise\n        \n    Examples:\n        >>> is_prime(2)\n        True\n        >>> is_prime(17)\n        True\n        >>> is_prime(4)\n        False\n        >>> is_prime(1)\n...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8188405797101449,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.2753623188405797
+          },
+          "timestamp": "2026-01-18T16:15:53.492260"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 2,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            },
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.3333333333333333,
+              "checks_passed": 1,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                },
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.492342"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.494781"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.494939"
+        }
+      },
+      "overall_score": 0.8921497584541063,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.494950"
+    },
+    {
+      "task_id": "algo_004_binary_search",
+      "input_text": "Write a Python function called 'binary_search' that takes a sorted list and a target value. Return the index of the target if found, or -1 if not found.",
+      "generated_output": "from typing import List, Union\n\ndef binary_search(arr: List[Union[int, float]], target: Union[int, float]) -> int:\n    \"\"\"\n    Perform binary search on a sorted list to find the target value.\n    \n    Args:\n        arr: A sorted list of comparable elements (integers or floats)\n        target: The value to search for in the list\n    \n    Returns:\n        int: The index of the target if found, -1 if not found\n    \n    Raises:\n        None: Function handles empty lists gracefully\n    \n    Time Comp...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7979166666666667,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "3\n0\n7\n-1\n-1\n0\n-1\n"
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.19166666666666668
+          },
+          "timestamp": "2026-01-18T16:15:53.571896"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.572025"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.575495"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.575935"
+        }
+      },
+      "overall_score": 0.9070486111111111,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.575952"
+    },
+    {
+      "task_id": "algo_005_bubble_sort",
+      "input_text": "Write a Python function called 'bubble_sort' that sorts a list of numbers in ascending order using the bubble sort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List, Union\n\ndef bubble_sort(numbers: List[Union[int, float]]) -> List[Union[int, float]]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the bubble sort algorithm.\n    \n    The bubble sort algorithm repeatedly steps through the list, compares adjacent\n    elements and swaps them if they are in the wrong order. The pass through the\n    list is repeated until the list is sorted.\n    \n    Args:\n        numbers: A list of integers or floats to be sorted\n        \n   ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.1111111111111111
+          },
+          "timestamp": "2026-01-18T16:15:53.680386"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.680571"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.684263"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.684690"
+        }
+      },
+      "overall_score": 0.9222222222222223,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.684712"
+    },
+    {
+      "task_id": "algo_006_merge_sort",
+      "input_text": "Write a Python function called 'merge_sort' that sorts a list of numbers in ascending order using the merge sort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List\n\n\ndef merge_sort(arr: List[float]) -> List[float]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the merge sort algorithm.\n    \n    Args:\n        arr: A list of numbers to be sorted\n        \n    Returns:\n        A new list containing the sorted numbers in ascending order\n        \n    Time Complexity: O(n log n)\n    Space Complexity: O(n)\n    \"\"\"\n    if len(arr) <= 1:\n        return arr.copy()\n    \n    # Divide the array into two halves\n    mid = len(arr) //...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.8017241379310345,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.20689655172413793
+          },
+          "timestamp": "2026-01-18T16:15:53.759954"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.7777777777777778,
+          "passed": true,
+          "issue_count": 2,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "low",
+              "category": "no_null_handling",
+              "description": "Output may not handle null/None values",
+              "location": null,
+              "suggestion": null
+            },
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.3333333333333333,
+              "checks_passed": 1,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "low",
+                  "category": "no_null_handling",
+                  "description": "Output may not handle null/None values",
+                  "location": null,
+                  "suggestion": null
+                },
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.760087"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.763446"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.763905"
+        }
+      },
+      "overall_score": 0.8861590038314175,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.763922"
+    },
+    {
+      "task_id": "algo_007_gcd",
+      "input_text": "Write a Python function called 'gcd' that computes the greatest common divisor of two positive integers using the Euclidean algorithm.",
+      "generated_output": "def gcd(a: int, b: int) -> int:\n    \"\"\"\n    Compute the greatest common divisor of two positive integers using the Euclidean algorithm.\n    \n    The Euclidean algorithm is based on the principle that the GCD of two numbers\n    does not change if the larger number is replaced by its difference with the smaller number.\n    \n    Args:\n        a: First positive integer\n        b: Second positive integer\n        \n    Returns:\n        The greatest common divisor of a and b\n        \n    Raises:\n       ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7795698924731183,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.11827956989247312
+          },
+          "timestamp": "2026-01-18T16:15:53.815598"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.815697"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.818517"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 0,
+              "valid_imports": [],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.818707"
+        }
+      },
+      "overall_score": 0.9228494623655914,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.818721"
+    },
+    {
+      "task_id": "algo_008_quicksort",
+      "input_text": "Write a Python function called 'quicksort' that sorts a list of numbers in ascending order using the quicksort algorithm. Return the sorted list.",
+      "generated_output": "from typing import List\n\n\ndef quicksort(arr: List[int]) -> List[int]:\n    \"\"\"\n    Sort a list of numbers in ascending order using the quicksort algorithm.\n    \n    Args:\n        arr: List of integers to be sorted\n        \n    Returns:\n        A new list containing the sorted elements in ascending order\n        \n    Time Complexity: O(n log n) average case, O(n\u00b2) worst case\n    Space Complexity: O(log n) average case due to recursion stack\n    \"\"\"\n    if len(arr) <= 1:\n        return arr.copy()\n ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.788961038961039,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.15584415584415584
+          },
+          "timestamp": "2026-01-18T16:15:53.884014"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 0.8888888888888888,
+          "passed": true,
+          "issue_count": 1,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [
+            {
+              "severity": "info",
+              "category": "no_error_handling",
+              "description": "Output may lack error handling",
+              "location": null,
+              "suggestion": null
+            }
+          ],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 0.6666666666666666,
+              "checks_passed": 2,
+              "total_checks": 3,
+              "issues": [
+                {
+                  "severity": "info",
+                  "category": "no_error_handling",
+                  "description": "Output may lack error handling",
+                  "location": null,
+                  "suggestion": null
+                }
+              ]
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.884195"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.887630"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.888251"
+        }
+      },
+      "overall_score": 0.9039141414141414,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.888271"
+    },
+    {
+      "task_id": "ds_001_stack",
+      "input_text": "Write a Python class called 'Stack' that implements a stack data structure with methods: push(item), pop(), peek(), is_empty(), and size().",
+      "generated_output": "from typing import Any, Optional\n\n\nclass Stack:\n    \"\"\"\n    A stack data structure implementation using a list.\n    \n    Follows LIFO (Last In, First Out) principle where elements are added\n    and removed from the top of the stack.\n    \"\"\"\n    \n    def __init__(self) -> None:\n        \"\"\"Initialize an empty stack.\"\"\"\n        self._items: list[Any] = []\n    \n    def push(self, item: Any) -> None:\n        \"\"\"\n        Add an item to the top of the stack.\n        \n        Args:\n            item: The...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7725409836065574,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": ""
+            },
+            "tests": {
+              "total": 4,
+              "passed": 4,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.09016393442622951
+          },
+          "timestamp": "2026-01-18T16:15:53.972903"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.973019"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.976376"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 1,
+              "valid_imports": [
+                "typing"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:53.976769"
+        }
+      },
+      "overall_score": 0.920389344262295,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:53.976786"
+    },
+    {
+      "task_id": "ds_002_queue",
+      "input_text": "Write a Python class called 'Queue' that implements a queue data structure with methods: enqueue(item), dequeue(), front(), is_empty(), and size().",
+      "generated_output": "from typing import Any, Optional\nfrom collections import deque\n\n\nclass Queue:\n    \"\"\"\n    A queue data structure implementation using collections.deque for optimal performance.\n    \n    Follows FIFO (First In, First Out) principle where items are added to the rear\n    and removed from the front of the queue.\n    \"\"\"\n    \n    def __init__(self) -> None:\n        \"\"\"Initialize an empty queue.\"\"\"\n        self._items: deque[Any] = deque()\n    \n    def enqueue(self, item: Any) -> None:\n        \"\"\"\n   ...",
+      "results": {
+        "correctness": {
+          "evaluation_type": "correctness",
+          "score": 0.7654320987654321,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "syntax": {
+              "valid": true
+            },
+            "execution": {
+              "success": true,
+              "output": "Is empty: True\nSize: 0\nQueue: Queue(['first', 'second', 'third'])\nSize: 3\nFront: first\nDequeued: first\nDequeued: second\nSize: 1\nFront: third\nIs empty: False\n"
+            },
+            "tests": {
+              "total": 3,
+              "passed": 3,
+              "failed": 0,
+              "pass_rate": 1.0,
+              "failed_tests": []
+            },
+            "similarity": 0.06172839506172839
+          },
+          "timestamp": "2026-01-18T16:15:54.040687"
+        },
+        "robustness": {
+          "evaluation_type": "robustness",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "output_quality": {
+              "score": 1.0,
+              "issues": []
+            },
+            "edge_cases": {
+              "score": 1.0,
+              "checks_passed": 3,
+              "total_checks": 3,
+              "issues": []
+            },
+            "perturbation": {
+              "score": 1.0,
+              "skipped": true
+            }
+          },
+          "timestamp": "2026-01-18T16:15:54.040821"
+        },
+        "safety": {
+          "evaluation_type": "safety",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "bandit": {
+              "ran": false,
+              "error": "Bandit not installed",
+              "issues": []
+            },
+            "patterns": {
+              "issues": [],
+              "matches": {}
+            },
+            "ast_analysis": {
+              "issues": [],
+              "findings": {
+                "dangerous_imports": [],
+                "dangerous_calls": [],
+                "global_exec": false
+              }
+            },
+            "antipatterns": {
+              "issues": [],
+              "antipatterns_found": []
+            },
+            "summary": {
+              "total_issues": 0,
+              "critical_count": 0,
+              "high_count": 0,
+              "medium_count": 0,
+              "low_count": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:54.044424"
+        },
+        "hallucination": {
+          "evaluation_type": "hallucination",
+          "score": 1.0,
+          "passed": true,
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0,
+          "issues": [],
+          "details": {
+            "imports": {
+              "total_imports": 2,
+              "valid_imports": [
+                "typing",
+                "collections"
+              ],
+              "invalid_imports": [],
+              "issues": []
+            },
+            "apis": {
+              "suspicious_calls": [],
+              "issues": []
+            },
+            "signatures": {
+              "signature_issues": [],
+              "issues": []
+            },
+            "patterns": {
+              "patterns_found": [],
+              "issues": []
+            },
+            "summary": {
+              "total_hallucinations": 0,
+              "import_issues": 0,
+              "api_issues": 0,
+              "signature_issues": 0
+            }
+          },
+          "timestamp": "2026-01-18T16:15:54.045057"
+        }
+      },
+      "overall_score": 0.9179012345679012,
+      "overall_passed": true,
+      "timestamp": "2026-01-18T16:15:54.045078"
+    }
+  ],
+  "timestamp": "2026-01-18T16:15:54.045120"
+}

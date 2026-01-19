@@ -1,0 +1,31 @@
+{
+  "experiment_name": "pass_at_k_20260118_161325",
+  "model": "claude-3-5-haiku-20241022",
+  "num_tasks": 10,
+  "total_samples": 50,
+  "total_correct": 50,
+  "average_pass_rate": 1.0,
+  "average_score": 0.7871421439857633,
+  "pass_at_k": {
+    "1": {
+      "mean": 1.0,
+      "std": 0.0,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "3": {
+      "mean": 1.0,
+      "std": 0.0,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "5": {
+      "mean": 1.0,
+      "std": 0.0,
+      "min": 1.0,
+      "max": 1.0
+    }
+  },
+  "api_cost": 0.42084,
+  "duration_seconds": 147.127615
+}

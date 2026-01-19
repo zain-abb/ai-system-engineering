@@ -1,0 +1,40 @@
+{
+  "experiment_id": "comparison_20260118_161333",
+  "timestamp": "2026-01-18T16:15:54.057030",
+  "models": [
+    "claude-3-5-haiku-20241022",
+    "claude-sonnet-4-20250514"
+  ],
+  "base_config": {
+    "dataset_path": "data/evaluation/benchmark_dataset.json",
+    "output_dir": "experiments/results",
+    "experiment_name": "exp_20260118_161333",
+    "model": "claude-sonnet-4-20250514",
+    "temperature": 0.7,
+    "max_tokens": 2048,
+    "save_checkpoints": true,
+    "checkpoint_interval": 5,
+    "categories": null,
+    "difficulties": null,
+    "max_tasks": 10,
+    "eval_config": {
+      "correctness_threshold": 0.7,
+      "robustness_threshold": 0.6,
+      "safety_threshold": 0.7,
+      "hallucination_threshold": 0.7,
+      "weights": {
+        "correctness": 0.35,
+        "robustness": 0.2,
+        "safety": 0.25,
+        "hallucination": 0.2
+      }
+    }
+  },
+  "git_commit": "c1f27ac0",
+  "environment": {
+    "python_version": "3.12.2",
+    "platform": "Darwin",
+    "platform_version": "25.2.0",
+    "anthropic_version": "0.75.0"
+  }
+}

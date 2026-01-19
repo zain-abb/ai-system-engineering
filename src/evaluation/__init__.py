@@ -41,6 +41,14 @@ from src.evaluation.metrics import (
     generate_evaluation_report,
 )
 
+from src.evaluation.pass_at_k import (
+    SampleResult,
+    PassAtKResult,
+    PassAtKEvaluator,
+    aggregate_pass_at_k_results,
+    compute_pass_at_k_simple,
+)
+
 __all__ = [
     # Base classes
     "EvaluationType",
@@ -71,4 +79,10 @@ __all__ = [
     "MetricsCalculator",
     "quick_evaluate",
     "generate_evaluation_report",
+    # Pass@k
+    "SampleResult",
+    "PassAtKResult",
+    "PassAtKEvaluator",
+    "aggregate_pass_at_k_results",
+    "compute_pass_at_k_simple",
 ]

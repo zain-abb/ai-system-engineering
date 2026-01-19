@@ -1,0 +1,582 @@
+{
+  "config": {
+    "dataset_path": "data/evaluation/benchmark_dataset.json",
+    "output_dir": "experiments/results",
+    "experiment_name": "pass_at_k_20260118_161325",
+    "model": "claude-3-5-haiku-20241022",
+    "temperature": 0.7,
+    "max_tokens": 2048,
+    "save_checkpoints": true,
+    "checkpoint_interval": 5,
+    "categories": null,
+    "difficulties": null,
+    "max_tasks": 10,
+    "eval_config": {
+      "correctness_threshold": 0.7,
+      "robustness_threshold": 0.6,
+      "safety_threshold": 0.7,
+      "hallucination_threshold": 0.7,
+      "weights": {
+        "correctness": 0.35,
+        "robustness": 0.2,
+        "safety": 0.25,
+        "hallucination": 0.2
+      }
+    },
+    "pass_at_k_config": {
+      "num_samples": 5,
+      "k_values": [
+        1,
+        3,
+        5
+      ],
+      "temperatures": [
+        0.2,
+        0.4,
+        0.6,
+        0.8
+      ],
+      "max_concurrent": 3,
+      "correctness_threshold": 0.7
+    }
+  },
+  "git_commit": "c1f27ac0",
+  "environment": {
+    "python_version": "3.12.2",
+    "platform": "Darwin",
+    "platform_version": "25.2.0",
+    "anthropic_version": "0.75.0"
+  },
+  "start_time": "2026-01-18T16:13:25.856677",
+  "end_time": "2026-01-18T16:15:52.984292",
+  "api_cost": 0.42084,
+  "aggregated": {
+    "num_tasks": 10,
+    "total_samples": 50,
+    "total_correct": 50,
+    "average_pass_rate": 1.0,
+    "average_score": 0.7871421439857633,
+    "pass_at_k": {
+      "1": {
+        "mean": 1.0,
+        "std": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "3": {
+        "mean": 1.0,
+        "std": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "5": {
+        "mean": 1.0,
+        "std": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      }
+    }
+  },
+  "task_results": [
+    {
+      "task_id": "algo_001_factorial",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7689447443086683,
+      "best_sample": {
+        "sample_id": 0,
+        "code": "def factorial(n: int) -> int:\n    \"\"\"\n    Compute the factorial of a non-negative integer n.\n    \n    The factorial of n (denoted as n!) is the product of all positive integers\n    less than or equal ...",
+        "passed": true,
+        "correctness_score": 0.7694805194805194
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7694805194805194,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7689873417721519,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7685185185185185,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7689873417721519,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.76875,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_002_fibonacci",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.8072933571351293,
+      "best_sample": {
+        "sample_id": 0,
+        "code": "def fibonacci(n: int) -> int:\n    \"\"\"\n    Calculate the nth Fibonacci number using 0-based indexing.\n    \n    Args:\n        n: The position in the Fibonacci sequence (0-based)\n        \n    Returns:\n  ...",
+        "passed": true,
+        "correctness_score": 0.8090277777777778
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.8090277777777778,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.8090277777777778,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.8069620253164557,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.8069620253164557,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.8044871794871795,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_003_is_prime",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.8208313957994264,
+      "best_sample": {
+        "sample_id": 4,
+        "code": "def is_prime(n: int) -> bool:\n    \"\"\"\n    Check if a given positive integer is prime.\n    \n    A prime number is a natural number greater than 1 that has no positive\n    divisors other than 1 and itse...",
+        "passed": true,
+        "correctness_score": 0.8257575757575758
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.8188405797101449,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.8198529411764706,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.8198529411764706,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.8198529411764706,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.8257575757575758,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_004_binary_search",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.8159785958273925,
+      "best_sample": {
+        "sample_id": 4,
+        "code": "from typing import List\n\ndef binary_search(arr: List[int], target: int) -> int:\n    \"\"\"\n    Performs binary search on a sorted list to find the target value.\n    \n    Args:\n        arr: A sorted list ...",
+        "passed": true,
+        "correctness_score": 0.8266666666666667
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.8160919540229885,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7949640287769784,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.8184523809523809,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.8237179487179487,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.8266666666666667,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_005_bubble_sort",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7792632455246551,
+      "best_sample": {
+        "sample_id": 4,
+        "code": "from typing import List, Union\n\ndef bubble_sort(numbers: List[Union[int, float]]) -> List[Union[int, float]]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the bubble sort algorithm.\n  ...",
+        "passed": true,
+        "correctness_score": 0.7857142857142857
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7774390243902439,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7777777777777778,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7777777777777778,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7776073619631901,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.7857142857142857,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_006_merge_sort",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7860967794647025,
+      "best_sample": {
+        "sample_id": 4,
+        "code": "from typing import List\n\ndef merge_sort(arr: List[int]) -> List[int]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the merge sort algorithm.\n    \n    Args:\n        arr: A list of integ...",
+        "passed": true,
+        "correctness_score": 0.7875
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7859281437125748,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7855029585798816,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7842857142857143,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7872670807453416,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.7875,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_007_gcd",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7789616754784909,
+      "best_sample": {
+        "sample_id": 0,
+        "code": "def gcd(a: int, b: int) -> int:\n    \"\"\"\n    Compute the greatest common divisor of two positive integers using the Euclidean algorithm.\n    \n    The Euclidean algorithm is based on the principle that ...",
+        "passed": true,
+        "correctness_score": 0.7795698924731183
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7795698924731183,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7792553191489362,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7792553191489362,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7792553191489362,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.7774725274725275,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "algo_008_quicksort",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7750549316323028,
+      "best_sample": {
+        "sample_id": 2,
+        "code": "from typing import List\n\n\ndef quicksort(arr: List[int]) -> List[int]:\n    \"\"\"\n    Sorts a list of numbers in ascending order using the quicksort algorithm.\n    \n    Args:\n        arr: List of integers...",
+        "passed": true,
+        "correctness_score": 0.7795566502463054
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.779126213592233,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7794117647058824,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7795566502463054,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7699386503067485,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.7672413793103449,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "ds_001_stack",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.7731189607994758,
+      "best_sample": {
+        "sample_id": 1,
+        "code": "from typing import Any, Optional\n\n\nclass Stack:\n    \"\"\"\n    A stack data structure implementation using a list.\n    \n    Follows Last-In-First-Out (LIFO) principle where elements are added\n    and rem...",
+        "passed": true,
+        "correctness_score": 0.7737068965517241
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7735042735042735,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.7737068965517241,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.7729166666666667,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7723577235772358,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.773109243697479,
+          "temperature": 0.8
+        }
+      ]
+    },
+    {
+      "task_id": "ds_002_queue",
+      "num_samples": 5,
+      "num_correct": 5,
+      "pass_at_k": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "pass_rate": 1.0,
+      "average_score": 0.765877753887389,
+      "best_sample": {
+        "sample_id": 4,
+        "code": "from typing import Any, Optional\nfrom collections import deque\n\n\nclass Queue:\n    \"\"\"\n    A queue data structure implementation using collections.deque for efficiency.\n    \n    Supports standard queue...",
+        "passed": true,
+        "correctness_score": 0.7703252032520325
+      },
+      "samples_summary": [
+        {
+          "sample_id": 0,
+          "passed": true,
+          "score": 0.7646198830409356,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 1,
+          "passed": true,
+          "score": 0.764367816091954,
+          "temperature": 0.2
+        },
+        {
+          "sample_id": 2,
+          "passed": true,
+          "score": 0.765625,
+          "temperature": 0.4
+        },
+        {
+          "sample_id": 3,
+          "passed": true,
+          "score": 0.7644508670520231,
+          "temperature": 0.6
+        },
+        {
+          "sample_id": 4,
+          "passed": true,
+          "score": 0.7703252032520325,
+          "temperature": 0.8
+        }
+      ]
+    }
+  ]
+}

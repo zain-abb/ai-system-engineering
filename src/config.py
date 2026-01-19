@@ -40,9 +40,11 @@ class CostConfig:
     daily_budget: float = field(
         default_factory=lambda: float(os.getenv("DAILY_API_BUDGET", "10.0"))
     )
-    # Pricing per 1K tokens (as of 2024)
+    # Pricing per 1K tokens (as of 2025)
     pricing: dict = field(default_factory=lambda: {
+        "claude-opus-4-20250514": {"input": 0.015, "output": 0.075},
         "claude-sonnet-4-20250514": {"input": 0.003, "output": 0.015},
+        "claude-3-5-haiku-20241022": {"input": 0.0008, "output": 0.004},
         "claude-3-haiku-20240307": {"input": 0.00025, "output": 0.00125},
     })
 

@@ -1873,5 +1873,5 @@ project/
 2. Decide which enhancements to prioritize
 3. Estimate your API budget for experiments
 4. Begin implementation starting with integration tests (free)
-5. Run multi-model comparison with Haiku + Sonnet first (cheapest)
+5. Run multi-model comparison@ with Haiku + Sonnet first (cheapest)
 6. Expand to Pass@k evaluation based on results and budget
