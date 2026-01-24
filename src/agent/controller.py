@@ -27,6 +27,12 @@ from src.capabilities import (
     RequirementsCapability,
     DocumentationCapability,
 )
+from src.streaming.emitter import (
+    emit_start,
+    emit_complete,
+    emit_progress,
+    ProcessingStep,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -213,6 +219,7 @@ class AgentController:
             self._add_to_history("user", user_input)
 
             # Classify intent (or use forced capability)
+            emit_start(ProcessingStep.INTENT_CLASSIFICATION, "Analyzing your request...")
             if force_capability:
                 intent = IntentClassification(
                     primary_intent=force_capability,
@@ -222,6 +229,13 @@ class AgentController:
                 )
             else:
                 intent = self.router.classify(user_input)
+
+            emit_complete(
+                ProcessingStep.INTENT_CLASSIFICATION,
+                f"Detected: {intent.primary_intent.value}",
+                confidence=intent.confidence,
+                intent=intent.primary_intent.value
+            )
 
             self.logger.info(
                 f"Intent: {intent.primary_intent.value} "
@@ -240,6 +254,7 @@ class AgentController:
             # Get RAG context if not provided and RAG is enabled
             should_use_rag = use_rag if use_rag is not None else self.use_rag
             if context is None and should_use_rag:
+                emit_start(ProcessingStep.SEMANTIC_SEARCH, "Searching codebase for context...")
                 rag_context, rag_sources = self._get_rag_context(
                     user_input, intent.primary_intent, language
                 )
@@ -247,7 +262,19 @@ class AgentController:
                     context = rag_context
                     context_used = rag_context
                     context_sources = rag_sources
+                    emit_complete(
+                        ProcessingStep.SEMANTIC_SEARCH,
+                        f"Found {len(rag_sources or [])} relevant files",
+                        candidates_found=len(rag_sources or []),
+                        files=rag_sources
+                    )
                     self.logger.info(f"RAG context retrieved from {len(rag_sources or [])} files")
+                else:
+                    emit_complete(
+                        ProcessingStep.SEMANTIC_SEARCH,
+                        "No relevant context found",
+                        candidates_found=0
+                    )
 
             # Build the request
             request = CapabilityRequest(
@@ -258,7 +285,19 @@ class AgentController:
             )
 
             # Execute the capability
+            emit_start(
+                ProcessingStep.LLM_GENERATION,
+                f"Generating with Claude ({intent.primary_intent.value})..."
+            )
             response = capability.execute(request)
+
+            usage = self.client.get_last_request_usage()
+            emit_complete(
+                ProcessingStep.LLM_GENERATION,
+                "Generation complete",
+                output_tokens=usage.get("output_tokens") if usage else None,
+                input_tokens=usage.get("input_tokens") if usage else None
+            )
 
             # Add assistant response to history
             if response.success:
@@ -272,7 +311,7 @@ class AgentController:
                 result=response.result,
                 capability_used=intent.primary_intent,
                 intent_classification=intent,
-                usage=self.client.get_last_request_usage(),
+                usage=usage,
                 error=response.error,
                 context_used=context_used,
                 context_sources=context_sources
@@ -280,6 +319,8 @@ class AgentController:
 
         except Exception as e:
             self.logger.error(f"Error processing request: {e}")
+            from src.streaming.emitter import emit_error
+            emit_error(str(e))
             return AgentResponse(
                 success=False,
                 result="",

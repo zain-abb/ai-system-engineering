@@ -19,14 +19,17 @@ import sys
 from contextlib import asynccontextmanager
 from typing import Optional
 
+import json
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from src.config import config
 from src.agent import AgentController, create_agent
 from src.capabilities.base import CapabilityType
+from src.streaming import EventEmitter, set_emitter
 
 # Configure logging
 logging.basicConfig(
@@ -193,6 +196,74 @@ async def generate(request: GenerateRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/generate/stream")
+async def generate_stream(request: GenerateRequest):
+    """Generic generation with real-time status updates via SSE."""
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    emitter = EventEmitter()
+
+    # Map task type to capability
+    capability_map = {
+        "code_generation": CapabilityType.CODE_GENERATION,
+        "test_generation": CapabilityType.TEST_GENERATION,
+        "code_review": CapabilityType.CODE_REVIEW,
+        "requirements": CapabilityType.REQUIREMENTS,
+        "documentation": CapabilityType.DOCUMENTATION,
+    }
+
+    force_capability = None
+    if request.task_type and request.task_type != "auto":
+        force_capability = capability_map.get(request.task_type)
+
+    async def event_generator():
+        set_emitter(emitter)
+
+        task = asyncio.create_task(
+            asyncio.to_thread(
+                agent.process,
+                user_input=request.prompt,
+                context=request.context,
+                language=request.language,
+                force_capability=force_capability,
+                options=request.options
+            )
+        )
+
+        while not task.done():
+            try:
+                event = await asyncio.wait_for(emitter.get_event(), timeout=0.1)
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.TimeoutError:
+                continue
+
+        while not emitter._queue.empty():
+            try:
+                event = emitter._queue.get_nowait()
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.QueueEmpty:
+                break
+
+        try:
+            response = task.result()
+            yield f"event: done\ndata: {json.dumps({'type': 'done', 'result': response.result, 'usage': response.usage or {}, 'capability_used': response.capability_used.value if response.capability_used else None, 'success': response.success, 'error': response.error, 'confidence': response.intent_classification.confidence if response.intent_classification else 0.0})}\n\n"
+        except Exception as e:
+            yield f"event: error\ndata: {json.dumps({'type': 'error', 'data': {'message': str(e)}})}\n\n"
+
+        set_emitter(None)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+
 @app.post("/code/generate")
 async def generate_code(request: CodeGenRequest):
     """Generate code from requirements."""
@@ -209,6 +280,65 @@ async def generate_code(request: CodeGenRequest):
         raise HTTPException(status_code=500, detail=response.error)
 
     return {"result": response.result, "usage": response.usage}
+
+
+@app.post("/code/generate/stream")
+async def generate_code_stream(request: CodeGenRequest):
+    """Generate code from requirements with real-time status updates via SSE."""
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    emitter = EventEmitter()
+
+    async def event_generator():
+        # Set emitter in context for the current task
+        set_emitter(emitter)
+
+        # Run generation in background thread (since it's sync code)
+        task = asyncio.create_task(
+            asyncio.to_thread(
+                agent.generate_code,
+                requirements=request.requirements,
+                language=request.language,
+                context=request.context
+            )
+        )
+
+        # Stream events while the task is running
+        while not task.done():
+            try:
+                event = await asyncio.wait_for(emitter.get_event(), timeout=0.1)
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.TimeoutError:
+                continue
+
+        # Get any remaining events
+        while not emitter._queue.empty():
+            try:
+                event = emitter._queue.get_nowait()
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.QueueEmpty:
+                break
+
+        # Get the result and send final done event
+        try:
+            response = task.result()
+            yield f"event: done\ndata: {json.dumps({'type': 'done', 'result': response.result, 'usage': response.usage or {}, 'capability_used': response.capability_used.value if response.capability_used else None, 'success': response.success, 'error': response.error})}\n\n"
+        except Exception as e:
+            yield f"event: error\ndata: {json.dumps({'type': 'error', 'data': {'message': str(e)}})}\n\n"
+
+        # Clear emitter from context
+        set_emitter(None)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 @app.post("/tests/generate")
@@ -229,6 +359,59 @@ async def generate_tests(request: TestGenRequest):
     return {"result": response.result, "usage": response.usage}
 
 
+@app.post("/tests/generate/stream")
+async def generate_tests_stream(request: TestGenRequest):
+    """Generate tests for code with real-time status updates via SSE."""
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    emitter = EventEmitter()
+
+    async def event_generator():
+        set_emitter(emitter)
+
+        task = asyncio.create_task(
+            asyncio.to_thread(
+                agent.generate_tests,
+                code=request.code,
+                language=request.language,
+                framework=request.framework
+            )
+        )
+
+        while not task.done():
+            try:
+                event = await asyncio.wait_for(emitter.get_event(), timeout=0.1)
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.TimeoutError:
+                continue
+
+        while not emitter._queue.empty():
+            try:
+                event = emitter._queue.get_nowait()
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.QueueEmpty:
+                break
+
+        try:
+            response = task.result()
+            yield f"event: done\ndata: {json.dumps({'type': 'done', 'result': response.result, 'usage': response.usage or {}, 'capability_used': response.capability_used.value if response.capability_used else None, 'success': response.success, 'error': response.error})}\n\n"
+        except Exception as e:
+            yield f"event: error\ndata: {json.dumps({'type': 'error', 'data': {'message': str(e)}})}\n\n"
+
+        set_emitter(None)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+
 @app.post("/code/review")
 async def review_code(request: CodeReviewRequest):
     """Review code for bugs, security issues, and improvements."""
@@ -245,6 +428,59 @@ async def review_code(request: CodeReviewRequest):
         raise HTTPException(status_code=500, detail=response.error)
 
     return {"result": response.result, "usage": response.usage}
+
+
+@app.post("/code/review/stream")
+async def review_code_stream(request: CodeReviewRequest):
+    """Review code with real-time status updates via SSE."""
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    emitter = EventEmitter()
+
+    async def event_generator():
+        set_emitter(emitter)
+
+        task = asyncio.create_task(
+            asyncio.to_thread(
+                agent.review_code,
+                code=request.code,
+                language=request.language,
+                focus=request.focus
+            )
+        )
+
+        while not task.done():
+            try:
+                event = await asyncio.wait_for(emitter.get_event(), timeout=0.1)
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.TimeoutError:
+                continue
+
+        while not emitter._queue.empty():
+            try:
+                event = emitter._queue.get_nowait()
+                yield f"event: {event.type.value}\ndata: {json.dumps(event.to_dict())}\n\n"
+            except asyncio.QueueEmpty:
+                break
+
+        try:
+            response = task.result()
+            yield f"event: done\ndata: {json.dumps({'type': 'done', 'result': response.result, 'usage': response.usage or {}, 'capability_used': response.capability_used.value if response.capability_used else None, 'success': response.success, 'error': response.error})}\n\n"
+        except Exception as e:
+            yield f"event: error\ndata: {json.dumps({'type': 'error', 'data': {'message': str(e)}})}\n\n"
+
+        set_emitter(None)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 @app.get("/usage")

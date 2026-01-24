@@ -144,3 +144,47 @@ export interface Issue {
   location?: string
   suggestion?: string
 }
+
+// Streaming Types
+export type ProcessingStepType =
+  | 'intent_classification'
+  | 'semantic_search'
+  | 'reranking'
+  | 'llm_generation'
+  | 'post_processing'
+
+export type StreamEventType =
+  | 'step_start'
+  | 'step_complete'
+  | 'step_progress'
+  | 'error'
+  | 'done'
+
+export interface StreamEvent {
+  type: StreamEventType
+  step: ProcessingStepType | null
+  data: Record<string, unknown>
+  timestamp: number
+}
+
+export interface StreamStepData {
+  message: string
+  duration_ms?: number
+  confidence?: number
+  candidates_found?: number
+  files?: string[]
+  input_tokens?: number
+  output_tokens?: number
+}
+
+export interface StreamDoneData {
+  result: string
+  usage: UsageInfo
+  capability_used: string | null
+  success: boolean
+  error?: string
+}
+
+export interface StreamErrorData {
+  message: string
+}
