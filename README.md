@@ -11,7 +11,9 @@ An AI-powered virtual agent that assists software engineers with code generation
 - **Documentation**: Generate API docs, README files, and inline documentation
 - **RAG Support**: Index your codebase for context-aware generation
 - **Evaluation Framework**: Assess generated code for quality metrics
+- **Real-Time Streaming**: SSE-based streaming with live processing step visibility
 - **Modern React UI**: Beautiful, responsive web interface with dark mode
+- **State Persistence**: Maintain form inputs and results across tab navigation
 - **Multi-Model Comparison**: Compare code quality across Claude Opus 4, Sonnet 4, and Haiku 3.5
 - **Pass@K Metrics**: Industry-standard evaluation using the Pass@K methodology
 
@@ -181,12 +183,16 @@ The React-based web interface includes:
 ### UI Features
 - Dark/Light mode toggle
 - Syntax-highlighted code editor
-- Real-time loading states
+- **Real-time streaming** with processing step visibility
 - Toast notifications for errors/success
 - Responsive design for all screen sizes
 - Collapsible sidebar navigation
+- **State persistence** across tab navigation
+- GitHub-flavored markdown rendering with copy button
 
 ## API Endpoints
+
+### REST Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -201,6 +207,107 @@ The React-based web interface includes:
 | `/rag/index` | POST | Index a codebase |
 | `/rag/stats` | GET | RAG system statistics |
 | `/rag/search` | POST | Search indexed code |
+
+### SSE Streaming Endpoints
+
+All streaming endpoints return Server-Sent Events (SSE) with real-time processing updates.
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/code/generate/stream` | POST | Stream code generation with step updates |
+| `/tests/generate/stream` | POST | Stream test generation with step updates |
+| `/code/review/stream` | POST | Stream code review with step updates |
+| `/generate/stream` | POST | Stream generic generation (docs, requirements) |
+
+#### SSE Event Types
+
+```
+event: step_start
+data: {"type": "step_start", "data": {"step": "intent_classification", "message": "Classifying intent..."}}
+
+event: step_complete
+data: {"type": "step_complete", "data": {"step": "intent_classification", "message": "Intent classified", "result": {...}}}
+
+event: done
+data: {"type": "done", "result": "...", "usage": {...}, "capability_used": "code_generation"}
+
+event: error
+data: {"type": "error", "data": {"message": "Error description"}}
+```
+
+## Real-Time Streaming
+
+SE-Agent implements Server-Sent Events (SSE) for real-time visibility into the processing pipeline. This provides users with immediate feedback on each stage of code generation, review, and analysis.
+
+### Processing Steps
+
+When using streaming endpoints, the following steps are reported in real-time:
+
+1. **Intent Classification** - Determining the type of request (code generation, review, etc.)
+2. **Semantic Search** - Retrieving relevant context from the indexed codebase (RAG)
+3. **LLM Generation** - Generating the response using Claude API
+
+### Frontend Integration
+
+The React frontend uses a custom `useStreamingGeneration` hook that:
+- Establishes EventSource connections to streaming endpoints
+- Tracks processing step status (pending → in-progress → completed)
+- Supports request cancellation
+- Maintains state across tab navigation
+
+### Using Streaming with cURL
+
+```bash
+# Stream code generation
+curl -N -X POST http://localhost:8000/code/generate/stream \
+  -H "Content-Type: application/json" \
+  -H "Accept: text/event-stream" \
+  -d '{"requirements": "Write a factorial function", "language": "python"}'
+
+# Stream code review
+curl -N -X POST http://localhost:8000/code/review/stream \
+  -H "Content-Type: application/json" \
+  -H "Accept: text/event-stream" \
+  -d '{"code": "def add(a,b): return a+b", "language": "python"}'
+```
+
+### Using Streaming with JavaScript
+
+```javascript
+const eventSource = new EventSource('/code/generate/stream', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ requirements: 'Write a factorial function', language: 'python' })
+});
+
+eventSource.addEventListener('step_start', (e) => {
+  const data = JSON.parse(e.data);
+  console.log(`Starting: ${data.data.step}`);
+});
+
+eventSource.addEventListener('step_complete', (e) => {
+  const data = JSON.parse(e.data);
+  console.log(`Completed: ${data.data.step}`);
+});
+
+eventSource.addEventListener('done', (e) => {
+  const data = JSON.parse(e.data);
+  console.log('Result:', data.result);
+  eventSource.close();
+});
+
+eventSource.addEventListener('error', (e) => {
+  console.error('Error:', e.data);
+  eventSource.close();
+});
+```
+
+### State Persistence
+
+The frontend maintains state across tab navigation using React Context (`CapabilityStateContext`). This means:
+- Form inputs are preserved when switching between pages
+- Generated results remain visible after navigation
+- Processing history is maintained for each capability
 
 ## Usage Examples
 

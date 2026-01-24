@@ -303,6 +303,63 @@ Retriever & Capability-aware retrieval with re-ranking (name matching, docstring
 \label{tab:rag}
 \end{table}
 
+\subsection{Real-Time Streaming Architecture}
+
+To enhance user experience and provide visibility into the processing pipeline, SE-Agent implements Server-Sent Events (SSE) for real-time streaming of processing status updates. This architecture enables users to observe each step of the agent's workflow as it executes.
+
+\subsubsection{SSE Implementation}
+
+The streaming system follows a producer-consumer pattern with an event emitter that queues processing events:
+
+\begin{enumerate}
+    \item \textbf{Event Emitter}: A centralized emitter captures events from all processing stages (intent classification, RAG retrieval, LLM generation) and queues them for transmission
+    \item \textbf{Async Generator}: FastAPI's \texttt{StreamingResponse} consumes events from the queue and yields them as SSE-formatted messages
+    \item \textbf{Event Types}: Four event types are emitted: \texttt{step\_start}, \texttt{step\_complete}, \texttt{done}, and \texttt{error}
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{SSE Streaming Endpoints}
+\begin{tabular}{llp{6cm}}
+\toprule
+\textbf{Endpoint} & \textbf{Capability} & \textbf{Processing Steps} \\
+\midrule
+\texttt{/code/generate/stream} & Code Generation & Intent Classification, Semantic Search, LLM Generation \\
+\texttt{/tests/generate/stream} & Test Generation & Intent Classification, Semantic Search, LLM Generation \\
+\texttt{/code/review/stream} & Code Review & Intent Classification, Semantic Search, LLM Generation \\
+\texttt{/generate/stream} & Documentation, Requirements & Intent Classification, Semantic Search, LLM Generation \\
+\bottomrule
+\end{tabular}
+\label{tab:sse_endpoints}
+\end{table}
+
+\subsubsection{Frontend Integration}
+
+The React frontend implements a custom \texttt{useStreamingGeneration} hook that:
+\begin{itemize}
+    \item Establishes an \texttt{EventSource} connection to streaming endpoints
+    \item Parses incoming SSE events and updates component state
+    \item Tracks processing steps with their status (pending, in-progress, completed)
+    \item Supports cancellation via \texttt{AbortController}
+    \item Maintains state persistence across tab navigation using React Context
+\end{itemize}
+
+The \texttt{ProcessingSteps} component provides visual feedback showing:
+\begin{itemize}
+    \item Current step being executed with animated spinner
+    \item Completed steps with checkmark indicators
+    \item Step descriptions and timing information
+\end{itemize}
+
+\subsubsection{State Persistence}
+
+A \texttt{CapabilityStateContext} provider maintains form inputs and results across tab navigation, preventing data loss when users switch between capability pages. This context stores:
+\begin{itemize}
+    \item Input field values (code, requirements, language selections)
+    \item Generated results with usage statistics
+    \item Processing step history for completed operations
+\end{itemize}
+
 \subsection{Quality Assurance}
 
 The system includes automated quality assurance mechanisms to ensure reliability:
