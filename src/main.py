@@ -509,7 +509,7 @@ async def get_history():
     return [
         {
             "role": msg.role,
-            "content": msg.content[:200] + "..." if len(msg.content) > 200 else msg.content,
+            "content": msg.content,
             "timestamp": msg.timestamp.isoformat(),
             "metadata": msg.metadata
         }
@@ -535,11 +535,16 @@ class IndexRequest(BaseModel):
 
 @app.post("/rag/index")
 async def index_codebase(request: IndexRequest):
-    """Index a codebase directory for RAG retrieval."""
+    """Index a codebase directory for RAG retrieval. Clears existing index first."""
     if agent is None:
         raise HTTPException(status_code=503, detail="Agent not initialized")
 
     try:
+        # Clear existing index before reindexing
+        if agent.retriever:
+            await asyncio.to_thread(agent.retriever.clear)
+            logger.info("Cleared existing RAG index before reindexing")
+
         # Run blocking indexing operation in a thread pool to avoid blocking async loop
         chunk_count = await asyncio.to_thread(
             agent.index_codebase,
@@ -553,6 +558,23 @@ async def index_codebase(request: IndexRequest):
         }
     except Exception as e:
         logger.error(f"Indexing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/rag/index")
+async def clear_rag_index():
+    """Clear the RAG index."""
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    if not agent.retriever:
+        raise HTTPException(status_code=503, detail="RAG not available")
+
+    try:
+        await asyncio.to_thread(agent.retriever.clear)
+        return {"status": "cleared", "message": "RAG index has been cleared"}
+    except Exception as e:
+        logger.error(f"Failed to clear RAG index: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

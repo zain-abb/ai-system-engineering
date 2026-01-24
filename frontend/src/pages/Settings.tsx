@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2, FolderOpen, Trash2, Database, History, Cpu } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,9 +7,11 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
 import { useSettings, CLAUDE_MODELS } from '@/contexts/SettingsContext'
+import { ConversationModal, type ConversationTurn } from '@/components/ConversationModal'
 
 // localStorage keys
 const STORAGE_KEYS = {
@@ -34,6 +36,8 @@ export default function Settings() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.EXTENSIONS, extensions)
   }, [extensions])
+  const [selectedTurn, setSelectedTurn] = useState<ConversationTurn | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
   const { toast } = useToast()
   const queryClient = useQueryClient()
 
@@ -51,6 +55,30 @@ export default function Settings() {
     queryKey: ['history'],
     queryFn: api.getHistory,
   })
+
+  // Group messages into conversation turns (user + assistant pairs)
+  const conversationTurns = useMemo(() => {
+    if (!history) return []
+    const turns: ConversationTurn[] = []
+    for (let i = 0; i < history.length; i++) {
+      if (history[i].role === 'user') {
+        turns.push({
+          user: history[i],
+          assistant: history[i + 1]?.role === 'assistant' ? history[i + 1] : null,
+        })
+      }
+    }
+    return turns
+  }, [history])
+
+  // Format capability name for display
+  const formatCapability = (capability: unknown): string => {
+    if (typeof capability !== 'string' || !capability) return 'Unknown'
+    return capability
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
 
   const indexMutation = useMutation({
     mutationFn: api.indexCodebase,
@@ -289,7 +317,7 @@ export default function Settings() {
                   Conversation History
                 </CardTitle>
                 <CardDescription>
-                  {history?.length || 0} messages in history
+                  {conversationTurns.length} conversation{conversationTurns.length !== 1 ? 's' : ''} in history
                 </CardDescription>
               </div>
               <Button
@@ -310,35 +338,28 @@ export default function Settings() {
             </div>
           </CardHeader>
           <CardContent>
-            {history && history.length > 0 ? (
-              <div className="space-y-2 max-h-[300px] overflow-auto">
-                {history.slice(0, 10).map((item, i) => (
+            {conversationTurns.length > 0 ? (
+              <div className="space-y-2 max-h-[400px] overflow-auto">
+                {conversationTurns.map((turn, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
+                    onClick={() => {
+                      setSelectedTurn(turn)
+                      setModalOpen(true)
+                    }}
+                    className="p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted/70 transition-colors"
                   >
-                    <span
-                      className={`text-xs font-medium px-2 py-1 rounded ${
-                        item.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary text-secondary-foreground'
-                      }`}
-                    >
-                      {item.role}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm truncate">{item.content}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {new Date(item.timestamp).toLocaleString()}
-                      </p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant="outline" className="text-xs">
+                        {formatCapability(turn.assistant?.metadata?.capability)}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(turn.user.timestamp).toLocaleString()}
+                      </span>
                     </div>
+                    <p className="text-sm truncate">{turn.user.content}</p>
                   </div>
                 ))}
-                {history.length > 10 && (
-                  <p className="text-sm text-muted-foreground text-center py-2">
-                    And {history.length - 10} more messages...
-                  </p>
-                )}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground text-center py-8">
@@ -348,6 +369,12 @@ export default function Settings() {
           </CardContent>
         </Card>
       </div>
+
+      <ConversationModal
+        turn={selectedTurn}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+      />
     </div>
   )
 }

@@ -89,7 +89,7 @@ class AgentController:
         client: Optional[ClaudeClient] = None,
         use_llm_routing: bool = True,
         use_rag: bool = True,
-        max_history: int = 10
+        max_history: int = 200
     ):
         """
         Initialize the agent controller.
