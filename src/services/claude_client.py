@@ -1,16 +1,22 @@
 """Anthropic Claude API client with cost tracking and error handling."""
 
+import json
 import logging
 from datetime import datetime, date
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional, List, Dict, Any
 
 import anthropic
 from anthropic import APIError, RateLimitError, APIConnectionError
 
-from src.config import config
+from src.config import config, PROJECT_ROOT
 
 logger = logging.getLogger(__name__)
+
+# Persistence directory and file
+DATA_DIR = PROJECT_ROOT / "data" / "persistence"
+USAGE_FILE = DATA_DIR / "usage_stats.json"
 
 
 @dataclass
@@ -29,6 +35,15 @@ class CostTracker:
     daily_usage: float = 0.0
     last_reset: date = field(default_factory=date.today)
     usage_history: List[UsageStats] = field(default_factory=list)
+    # Cumulative totals (persisted across sessions)
+    total_input_tokens: int = 0
+    total_output_tokens: int = 0
+    total_cost: float = 0.0
+    total_requests: int = 0
+
+    def __post_init__(self):
+        """Load persisted data after initialization."""
+        self._load()
 
     def _maybe_reset(self) -> None:
         """Reset daily usage if it's a new day."""
@@ -65,6 +80,15 @@ class CostTracker:
         )
         self.usage_history.append(stats)
 
+        # Update cumulative totals
+        self.total_input_tokens += input_tokens
+        self.total_output_tokens += output_tokens
+        self.total_cost += cost
+        self.total_requests += 1
+
+        # Persist to disk
+        self._save()
+
         logger.info(
             f"API cost: ${cost:.4f} | Daily total: ${self.daily_usage:.2f}/{self.daily_limit:.2f}"
         )
@@ -75,6 +99,46 @@ class CostTracker:
         """Get remaining daily budget."""
         self._maybe_reset()
         return self.daily_limit - self.daily_usage
+
+    def _save(self) -> None:
+        """Save usage stats to disk."""
+        try:
+            DATA_DIR.mkdir(parents=True, exist_ok=True)
+            data = {
+                "total_input_tokens": self.total_input_tokens,
+                "total_output_tokens": self.total_output_tokens,
+                "total_cost": self.total_cost,
+                "total_requests": self.total_requests,
+                "daily_usage": self.daily_usage,
+                "last_reset": self.last_reset.isoformat(),
+            }
+            with open(USAGE_FILE, 'w') as f:
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to save usage stats: {e}")
+
+    def _load(self) -> None:
+        """Load usage stats from disk."""
+        try:
+            if USAGE_FILE.exists():
+                with open(USAGE_FILE, 'r') as f:
+                    data = json.load(f)
+                self.total_input_tokens = data.get("total_input_tokens", 0)
+                self.total_output_tokens = data.get("total_output_tokens", 0)
+                self.total_cost = data.get("total_cost", 0.0)
+                self.total_requests = data.get("total_requests", 0)
+                # Load daily usage and check if it needs reset
+                saved_date = date.fromisoformat(data.get("last_reset", date.today().isoformat()))
+                if saved_date == date.today():
+                    self.daily_usage = data.get("daily_usage", 0.0)
+                    self.last_reset = saved_date
+                else:
+                    # New day, reset daily usage
+                    self.daily_usage = 0.0
+                    self.last_reset = date.today()
+                logger.info(f"Loaded usage stats: {self.total_requests} requests, ${self.total_cost:.4f} total")
+        except Exception as e:
+            logger.warning(f"Failed to load usage stats: {e}")
 
 
 @dataclass
@@ -206,23 +270,18 @@ class ClaudeClient:
         return self.generate(prompt, **kwargs)
 
     def get_usage_stats(self) -> Dict[str, Any]:
-        """Get current usage statistics."""
-        # Calculate totals from usage history
-        total_input = sum(u.input_tokens for u in self.cost_tracker.usage_history)
-        total_output = sum(u.output_tokens for u in self.cost_tracker.usage_history)
-        total_cost = sum(u.total_cost for u in self.cost_tracker.usage_history)
-
+        """Get current usage statistics (persisted across sessions)."""
         return {
             "daily_usage": self.cost_tracker.daily_usage,
             "daily_limit": self.cost_tracker.daily_limit,
             "remaining": self.cost_tracker.get_remaining_budget(),
-            "request_count": len(self.cost_tracker.usage_history),
-            # Fields expected by frontend
-            "total_requests": len(self.cost_tracker.usage_history),
-            "input_tokens": total_input,
-            "output_tokens": total_output,
-            "total_tokens": total_input + total_output,
-            "total_cost": total_cost,
+            "request_count": self.cost_tracker.total_requests,
+            # Fields expected by frontend (cumulative totals)
+            "total_requests": self.cost_tracker.total_requests,
+            "input_tokens": self.cost_tracker.total_input_tokens,
+            "output_tokens": self.cost_tracker.total_output_tokens,
+            "total_tokens": self.cost_tracker.total_input_tokens + self.cost_tracker.total_output_tokens,
+            "total_cost": self.cost_tracker.total_cost,
         }
 
     def get_last_request_usage(self) -> Dict[str, Any]:

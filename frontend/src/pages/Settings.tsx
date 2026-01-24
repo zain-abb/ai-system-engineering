@@ -98,6 +98,24 @@ export default function Settings() {
     },
   })
 
+  const clearRagMutation = useMutation({
+    mutationFn: api.clearRagIndex,
+    onSuccess: () => {
+      toast({
+        title: 'RAG Index Cleared',
+        description: 'The RAG index has been cleared successfully.',
+      })
+      queryClient.invalidateQueries({ queryKey: ['ragStats'] })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to Clear RAG Index',
+        description: error.message,
+      })
+    },
+  })
+
   const clearHistoryMutation = useMutation({
     mutationFn: api.clearHistory,
     onSuccess: () => {
@@ -240,7 +258,26 @@ export default function Settings() {
 
             {/* RAG Stats */}
             <div className="space-y-2">
-              <p className="text-sm font-medium">Index Status</p>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">Index Status</p>
+                {ragStats?.total_chunks !== undefined && ragStats.total_chunks > 0 && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => clearRagMutation.mutate()}
+                    disabled={clearRagMutation.isPending}
+                  >
+                    {clearRagMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Clear Index
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
               {ragStats?.total_chunks !== undefined ? (
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
