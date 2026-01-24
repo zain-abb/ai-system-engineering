@@ -5,24 +5,28 @@ export interface GenerateRequest {
   context?: string
   language?: string
   options?: Record<string, unknown>
+  model?: string
 }
 
 export interface CodeGenRequest {
   requirements: string
   language?: string
   context?: string
+  model?: string
 }
 
 export interface TestGenRequest {
   code: string
   language?: string
   framework?: string
+  model?: string
 }
 
 export interface CodeReviewRequest {
   code: string
   language?: string
   focus?: string
+  model?: string
 }
 
 export interface IndexRequest {

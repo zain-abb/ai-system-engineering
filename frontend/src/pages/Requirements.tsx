@@ -9,10 +9,12 @@ import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { useToast } from '@/hooks/use-toast'
 import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
 import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
 import type { GenerateRequest, GenerateResponse } from '@/types/api'
 
 export default function Requirements() {
   const { toast } = useToast()
+  const { model } = useSettings()
   const { requirements, setRequirements, resetRequirements } = useCapabilityState()
 
   const {
@@ -51,6 +53,7 @@ export default function Requirements() {
       prompt: requirements.requirements,
       task_type: 'requirements',
       context: requirements.context || undefined,
+      model,
     })
   }
 

@@ -14,6 +14,7 @@ An AI-powered virtual agent that assists software engineers with code generation
 - **Real-Time Streaming**: SSE-based streaming with live processing step visibility
 - **Modern React UI**: Beautiful, responsive web interface with dark mode
 - **State Persistence**: Maintain form inputs and results across tab navigation
+- **Global Model Selection**: Choose between Claude Haiku, Sonnet, or Opus for all generations
 - **Multi-Model Comparison**: Compare code quality across Claude Opus 4, Sonnet 4, and Haiku 3.5
 - **Pass@K Metrics**: Industry-standard evaluation using the Pass@K methodology
 
@@ -178,7 +179,7 @@ The React-based web interface includes:
 - **Requirements Analysis**: Analyze and structure requirements
 - **Documentation**: Generate API docs, README, and inline comments
 - **Evaluation**: Check code for correctness, robustness, safety, and hallucination
-- **Settings**: Manage RAG indexing, view usage stats, and clear history
+- **Settings**: Configure AI model selection, manage RAG indexing, view usage stats, and clear history
 
 ### UI Features
 - Dark/Light mode toggle
@@ -188,6 +189,7 @@ The React-based web interface includes:
 - Responsive design for all screen sizes
 - Collapsible sidebar navigation
 - **State persistence** across tab navigation
+- **Global model selection** (Haiku, Sonnet, Opus) with localStorage persistence
 - GitHub-flavored markdown rendering with copy button
 
 ## API Endpoints
@@ -811,6 +813,20 @@ project/
 ```
 
 ## Configuration
+
+### Global Model Selection
+
+The web UI includes a global model selector in the Settings page that persists across sessions:
+
+| Model | Description | Best For |
+|-------|-------------|----------|
+| **Haiku** (default) | Fast & cost-effective | Quick iterations, simple tasks |
+| **Sonnet** | Balanced performance | Most development work |
+| **Opus** | Highest quality | Complex reasoning, critical code |
+
+The selected model is stored in localStorage and used for all capability pages (Code Generation, Test Generation, Code Review, Documentation, Requirements).
+
+### Environment Variables
 
 Key configuration options in `.env`:
 

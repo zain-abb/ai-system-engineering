@@ -16,6 +16,7 @@ import { ProcessingSteps } from '@/components/ProcessingSteps'
 import { useToast } from '@/hooks/use-toast'
 import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
 import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
 import type { TestGenRequest, TestGenResponse } from '@/types/api'
 
 const languages = [
@@ -46,6 +47,7 @@ const frameworks = {
 
 export default function TestGeneration() {
   const { toast } = useToast()
+  const { model } = useSettings()
   const { testGeneration, setTestGeneration, resetTestGeneration } = useCapabilityState()
 
   const {
@@ -92,6 +94,7 @@ export default function TestGeneration() {
       code: testGeneration.code,
       language: testGeneration.language,
       framework: testGeneration.framework,
+      model,
     })
   }
 

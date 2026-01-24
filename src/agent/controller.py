@@ -195,7 +195,8 @@ class AgentController:
         language: str = "python",
         force_capability: Optional[CapabilityType] = None,
         options: Optional[Dict[str, Any]] = None,
-        use_rag: Optional[bool] = None  # Override instance setting
+        use_rag: Optional[bool] = None,  # Override instance setting
+        model: Optional[str] = None  # Claude model to use
     ) -> AgentResponse:
         """
         Process a user request.
@@ -207,12 +208,19 @@ class AgentController:
             force_capability: Force a specific capability (bypass routing)
             options: Additional options for the capability
             use_rag: Override RAG usage for this request
+            model: Claude model to use (e.g., claude-3-5-haiku-20241022)
 
         Returns:
             AgentResponse with the result
         """
         context_used = None
         context_sources = None
+
+        # Add model to options if specified
+        if model:
+            options = options or {}
+            options["generation_params"] = options.get("generation_params", {})
+            options["generation_params"]["model"] = model
 
         try:
             # Add user message to history
@@ -331,42 +339,48 @@ class AgentController:
         self,
         requirements: str,
         language: str = "python",
-        context: Optional[str] = None
+        context: Optional[str] = None,
+        model: Optional[str] = None
     ) -> AgentResponse:
         """Convenience method for code generation."""
         return self.process(
             user_input=requirements,
             context=context,
             language=language,
-            force_capability=CapabilityType.CODE_GENERATION
+            force_capability=CapabilityType.CODE_GENERATION,
+            model=model
         )
 
     def generate_tests(
         self,
         code: str,
         language: str = "python",
-        framework: str = "pytest"
+        framework: str = "pytest",
+        model: Optional[str] = None
     ) -> AgentResponse:
         """Convenience method for test generation."""
         return self.process(
             user_input=code,
             language=language,
             force_capability=CapabilityType.TEST_GENERATION,
-            options={"framework": framework}
+            options={"framework": framework},
+            model=model
         )
 
     def review_code(
         self,
         code: str,
         language: str = "python",
-        focus: Optional[str] = None
+        focus: Optional[str] = None,
+        model: Optional[str] = None
     ) -> AgentResponse:
         """Convenience method for code review."""
         return self.process(
             user_input=code,
             language=language,
             force_capability=CapabilityType.CODE_REVIEW,
-            options={"focus": focus} if focus else None
+            options={"focus": focus} if focus else None,
+            model=model
         )
 
     def analyze_requirements(

@@ -16,6 +16,7 @@ import { ProcessingSteps } from '@/components/ProcessingSteps'
 import { useToast } from '@/hooks/use-toast'
 import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
 import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
 import type { CodeGenRequest, CodeGenResponse } from '@/types/api'
 
 const languages = [
@@ -29,6 +30,7 @@ const languages = [
 
 export default function CodeGeneration() {
   const { toast } = useToast()
+  const { model } = useSettings()
   const { codeGeneration, setCodeGeneration, resetCodeGeneration } = useCapabilityState()
 
   const {
@@ -67,6 +69,7 @@ export default function CodeGeneration() {
       requirements: codeGeneration.requirements,
       language: codeGeneration.language,
       context: codeGeneration.context || undefined,
+      model,
     })
   }
 

@@ -96,6 +96,7 @@ class GenerateRequest(BaseModel):
     context: Optional[str] = None
     language: str = "python"
     options: Optional[dict] = None
+    model: Optional[str] = None  # Claude model to use
 
 
 class GenerateResponse(BaseModel):
@@ -121,6 +122,7 @@ class CodeGenRequest(BaseModel):
     requirements: str
     language: str = "python"
     context: Optional[str] = None
+    model: Optional[str] = None  # Claude model to use
 
 
 class TestGenRequest(BaseModel):
@@ -128,6 +130,7 @@ class TestGenRequest(BaseModel):
     code: str
     language: str = "python"
     framework: str = "pytest"
+    model: Optional[str] = None  # Claude model to use
 
 
 class CodeReviewRequest(BaseModel):
@@ -135,6 +138,7 @@ class CodeReviewRequest(BaseModel):
     code: str
     language: str = "python"
     focus: Optional[str] = None
+    model: Optional[str] = None  # Claude model to use
 
 
 # API Endpoints
@@ -227,7 +231,8 @@ async def generate_stream(request: GenerateRequest):
                 context=request.context,
                 language=request.language,
                 force_capability=force_capability,
-                options=request.options
+                options=request.options,
+                model=request.model
             )
         )
 
@@ -300,7 +305,8 @@ async def generate_code_stream(request: CodeGenRequest):
                 agent.generate_code,
                 requirements=request.requirements,
                 language=request.language,
-                context=request.context
+                context=request.context,
+                model=request.model
             )
         )
 
@@ -375,7 +381,8 @@ async def generate_tests_stream(request: TestGenRequest):
                 agent.generate_tests,
                 code=request.code,
                 language=request.language,
-                framework=request.framework
+                framework=request.framework,
+                model=request.model
             )
         )
 
@@ -446,7 +453,8 @@ async def review_code_stream(request: CodeReviewRequest):
                 agent.review_code,
                 code=request.code,
                 language=request.language,
-                focus=request.focus
+                focus=request.focus,
+                model=request.model
             )
         )
 

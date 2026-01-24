@@ -16,6 +16,7 @@ import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { useToast } from '@/hooks/use-toast'
 import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
 import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
 import type { CodeReviewRequest, ReviewResponse } from '@/types/api'
 
 const languages = [
@@ -38,6 +39,7 @@ const focusAreas = [
 
 export default function CodeReview() {
   const { toast } = useToast()
+  const { model } = useSettings()
   const { codeReview, setCodeReview, resetCodeReview } = useCapabilityState()
 
   const {
@@ -76,6 +78,7 @@ export default function CodeReview() {
       code: codeReview.code,
       language: codeReview.language,
       focus: codeReview.focus === 'general' ? undefined : codeReview.focus,
+      model,
     })
   }
 

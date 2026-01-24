@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader2, FolderOpen, Trash2, Database, History } from 'lucide-react'
+import { Loader2, FolderOpen, Trash2, Database, History, Cpu } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
+import { useSettings, CLAUDE_MODELS } from '@/contexts/SettingsContext'
 
 // localStorage keys
 const STORAGE_KEYS = {
@@ -17,6 +18,7 @@ const STORAGE_KEYS = {
 }
 
 export default function Settings() {
+  const { model, setModel } = useSettings()
   const [indexDirectory, setIndexDirectory] = useState(() => {
     return localStorage.getItem(STORAGE_KEYS.INDEX_DIRECTORY) || ''
   })
@@ -117,6 +119,43 @@ export default function Settings() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* AI Model Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Cpu className="h-5 w-5" />
+              AI Model
+            </CardTitle>
+            <CardDescription>
+              Select the Claude model for all generations
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              {CLAUDE_MODELS.map((m) => (
+                <div
+                  key={m.id}
+                  onClick={() => setModel(m.id)}
+                  className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                    model === m.id
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div>
+                    <p className="font-medium">{m.name}</p>
+                    <p className="text-sm text-muted-foreground">{m.description}</p>
+                  </div>
+                  {model === m.id && <div className="h-2 w-2 rounded-full bg-primary" />}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Selected: <code className="bg-muted px-1 rounded">{model}</code>
+            </p>
+          </CardContent>
+        </Card>
+
         {/* RAG Indexing */}
         <Card>
           <CardHeader>

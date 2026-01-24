@@ -107,7 +107,7 @@ Naples, \the\year
 \newpage
 
 \begin{abstract}
-This report presents the design, implementation, and empirical evaluation of SE-Agent, an AI-powered Software Engineering Assistant built on Anthropic's Claude API. The system provides five core capabilities: code generation, test generation, code review, requirements analysis, and documentation generation, augmented by a Retrieval-Augmented Generation (RAG) system for context-aware responses. A key contribution is the comprehensive evaluation framework that assesses LLM-generated code across four quality dimensions: correctness, robustness, safety, and hallucination detection. The evaluation framework employs multiple analysis techniques including AST parsing, static analysis with Bandit, execution-based testing, and pattern-based vulnerability detection. Empirical evaluation on a benchmark dataset of 27 coding tasks across five categories (algorithms, data structures, string manipulation, file operations, and error handling) demonstrates strong performance with an overall pass rate of 92.59\% and an average weighted score of 0.905. The system achieves particularly high scores in safety (99.4\%) and hallucination detection (99.4\%), indicating reliable generation of secure code without fabricated APIs. Multi-model comparison experiments demonstrate consistent performance across Claude 3.5 Haiku and Claude Sonnet 4 (both achieving 100\% pass rate with 0.91 average score), while Pass@K evaluation with 5 samples per task confirms reliable code generation with 100\% pass rate. The modular architecture enables easy extension to additional capabilities and evaluation criteria, supported by a comprehensive test suite of 381 tests achieving 99\% code coverage across evaluation modules.
+This report presents the design, implementation, and empirical evaluation of SE-Agent, an AI-powered Software Engineering Assistant built on Anthropic's Claude API. The system provides five core capabilities: code generation, test generation, code review, requirements analysis, and documentation generation, augmented by a Retrieval-Augmented Generation (RAG) system for context-aware responses. A key contribution is the comprehensive evaluation framework that assesses LLM-generated code across four quality dimensions: correctness, robustness, safety, and hallucination detection. The evaluation framework employs multiple analysis techniques including AST parsing, static analysis with Bandit, execution-based testing, and pattern-based vulnerability detection. Empirical evaluation on a benchmark dataset of 27 coding tasks across five categories (algorithms, data structures, string manipulation, file operations, and error handling) demonstrates strong performance with an overall pass rate of 92.59\% and an average weighted score of 0.905. The system achieves particularly high scores in safety (99.4\%) and hallucination detection (99.4\%), indicating reliable generation of secure code without fabricated APIs. Multi-model comparison experiments demonstrate consistent performance across Claude 3.5 Haiku and Claude Sonnet 4 (both achieving 100\% pass rate with 0.91 average score), while Pass@K evaluation with 5 samples per task confirms reliable code generation with 100\% pass rate. The modular architecture enables easy extension to additional capabilities and evaluation criteria, supported by a comprehensive test suite of 381 tests achieving 99\% code coverage across evaluation modules. A global model selection feature allows users to switch between Claude Haiku, Sonnet, and Opus models directly from the web interface, with preferences persisted across sessions.
 
 \textbf{Keywords:} Large Language Models, Code Generation, Software Engineering, Evaluation Framework, Retrieval-Augmented Generation, Static Analysis, Claude API, Pass@K, Multi-Model Comparison
 \end{abstract}
@@ -160,6 +160,7 @@ This work makes the following contributions:
     \item \textbf{Empirical Evaluation}: Detailed experimental results with visualizations demonstrating system performance
     \item \textbf{Multi-Model Comparison Framework}: Infrastructure for comparing performance across different Claude models with cost tracking
     \item \textbf{Pass@K Integration}: Implementation of the Pass@K metric for robust code generation assessment
+    \item \textbf{Global Model Selection}: User-configurable model preference with session persistence for seamless switching between Claude variants
     \item \textbf{Open Architecture}: Extensible design enabling addition of new capabilities and evaluation criteria
 \end{enumerate}
 
@@ -359,6 +360,18 @@ A \texttt{CapabilityStateContext} provider maintains form inputs and results acr
     \item Generated results with usage statistics
     \item Processing step history for completed operations
 \end{itemize}
+
+\subsubsection{Global Model Selection}
+
+A \texttt{SettingsContext} provider enables users to select their preferred Claude model for all generations:
+\begin{itemize}
+    \item \textbf{Available Models}: Claude 3.5 Haiku (default, fast \& cost-effective), Claude Sonnet 4 (balanced performance), Claude Opus 4 (highest quality)
+    \item \textbf{Persistence}: Selected model is stored in \texttt{localStorage} and persists across browser sessions
+    \item \textbf{Propagation}: All capability pages consume the setting via \texttt{useSettings()} hook and include the model parameter in API requests
+    \item \textbf{Backend Integration}: The model parameter flows through FastAPI endpoints to \texttt{AgentController.process()} and ultimately to \texttt{ClaudeClient.generate()}
+\end{itemize}
+
+This architecture allows users to easily switch between models based on their needs---using Haiku for rapid iteration during development and Opus for production-critical code generation---without modifying environment variables or restarting the application.
 
 \subsection{Quality Assurance}
 
@@ -848,6 +861,7 @@ RAG & Optional context augmentation & Mandatory for all generations \\
     \item \textbf{High Test Coverage}: 381 tests (325 unit + 56 integration) achieving 99\% code coverage across evaluation modules
     \item \textbf{Multi-Model Support}: Framework for comparing different Claude models with cost tracking
     \item \textbf{Pass@K Evaluation}: Robust metric for assessing code generation reliability across multiple samples
+    \item \textbf{Global Model Selection}: User-configurable model preference (Haiku, Sonnet, Opus) with localStorage persistence
 \end{enumerate}
 
 \subsection{Limitations}
@@ -881,6 +895,7 @@ This project successfully developed SE-Agent, a comprehensive AI-powered softwar
     \item Empirical validation demonstrating 92.59\% pass rate and 0.905 average score
     \item Multi-model comparison framework validating consistent performance across Claude 3.5 Haiku and Claude Sonnet 4
     \item Pass@K evaluation achieving 100\% pass rate with 5 samples per task, demonstrating reliable code generation
+    \item Global model selection with localStorage persistence, allowing users to switch between Haiku, Sonnet, and Opus
     \item Production-ready deployment with REST API, CLI, web interfaces, and 99\% test coverage (381 tests)
 \end{enumerate}
 

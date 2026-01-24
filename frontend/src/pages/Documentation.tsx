@@ -16,6 +16,7 @@ import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { useToast } from '@/hooks/use-toast'
 import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
 import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
 import type { GenerateRequest, GenerateResponse } from '@/types/api'
 
 const languages = [
@@ -34,6 +35,7 @@ const docTypes = [
 
 export default function Documentation() {
   const { toast } = useToast()
+  const { model } = useSettings()
   const { documentation, setDocumentation, resetDocumentation } = useCapabilityState()
 
   const {
@@ -72,6 +74,7 @@ export default function Documentation() {
       prompt: `Generate ${documentation.docType} documentation for this code:\n\n${documentation.code}`,
       task_type: 'documentation',
       language: documentation.language,
+      model,
     })
   }
 
