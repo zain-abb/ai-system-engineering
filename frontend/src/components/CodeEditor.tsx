@@ -11,6 +11,7 @@ interface CodeEditorProps {
   placeholder?: string
   className?: string
   minHeight?: string
+  disabled?: boolean
 }
 
 export function CodeEditor({
@@ -21,6 +22,7 @@ export function CodeEditor({
   placeholder = 'Enter your code here...',
   className,
   minHeight = '300px',
+  disabled = false,
 }: CodeEditorProps) {
   const isDark = document.documentElement.classList.contains('dark')
 
@@ -54,6 +56,7 @@ export function CodeEditor({
         className
       )}
       style={{ minHeight }}
+      disabled={disabled}
     />
   )
 }

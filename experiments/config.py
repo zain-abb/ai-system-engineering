@@ -4,9 +4,19 @@ import os
 import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 from src.evaluation.metrics import EvaluationConfig
+
+
+@dataclass
+class PassAtKConfig:
+    """Configuration for Pass@K experiments."""
+    num_samples: int = 10
+    k_values: List[int] = field(default_factory=lambda: [1, 5, 10])
+    temperatures: List[float] = field(default_factory=lambda: [0.2, 0.4, 0.6, 0.8])
+    max_concurrent: int = 3
+    correctness_threshold: float = 0.7
 
 
 @dataclass
@@ -38,13 +48,16 @@ class ExperimentConfig:
     difficulties: Optional[list] = None  # Filter by difficulty
     max_tasks: Optional[int] = None  # Limit number of tasks
 
+    # Pass@K settings (optional)
+    pass_at_k_config: Optional[PassAtKConfig] = None
+
     def get_output_path(self) -> str:
         """Get the full output directory path for this experiment."""
         return os.path.join(self.output_dir, self.experiment_name)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert config to dictionary for serialization."""
-        return {
+        result = {
             "dataset_path": self.dataset_path,
             "output_dir": self.output_dir,
             "experiment_name": self.experiment_name,
@@ -64,6 +77,15 @@ class ExperimentConfig:
                 "weights": self.eval_config.weights,
             }
         }
+        if self.pass_at_k_config:
+            result["pass_at_k_config"] = {
+                "num_samples": self.pass_at_k_config.num_samples,
+                "k_values": self.pass_at_k_config.k_values,
+                "temperatures": self.pass_at_k_config.temperatures,
+                "max_concurrent": self.pass_at_k_config.max_concurrent,
+                "correctness_threshold": self.pass_at_k_config.correctness_threshold,
+            }
+        return result
 
     @staticmethod
     def get_git_commit() -> Optional[str]:

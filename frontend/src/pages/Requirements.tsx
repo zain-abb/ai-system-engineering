@@ -1,36 +1,46 @@
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { Loader2, FileText } from 'lucide-react'
+import { useEffect } from 'react'
+import { Loader2, FileText, XCircle } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { ProcessingSteps } from '@/components/ProcessingSteps'
+import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { useToast } from '@/hooks/use-toast'
-import { api } from '@/lib/api'
+import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
+import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
+import type { GenerateRequest, GenerateResponse } from '@/types/api'
 
 export default function Requirements() {
-  const [requirements, setRequirements] = useState('')
-  const [context, setContext] = useState('')
   const { toast } = useToast()
+  const { model } = useSettings()
+  const { requirements, setRequirements, resetRequirements } = useCapabilityState()
 
-  const mutation = useMutation({
-    mutationFn: (data: { prompt: string; context?: string }) =>
-      api.generate({
-        prompt: data.prompt,
-        task_type: 'requirements',
-        context: data.context,
-      }),
-    onError: (error: Error) => {
-      toast({
-        variant: 'destructive',
-        title: 'Analysis Failed',
-        description: error.message,
-      })
-    },
-  })
+  const {
+    isStreaming,
+    steps,
+    currentStep,
+    result,
+    error,
+    startGeneration,
+    cancel,
+    reset: resetStreaming,
+  } = useStreamingGeneration<GenerateRequest, GenerateResponse>('/generate/stream')
 
-  const handleAnalyze = () => {
-    if (!requirements.trim()) {
+  // Sync streaming result to context when it changes
+  useEffect(() => {
+    if (result) {
+      setRequirements({ result, steps })
+    }
+  }, [result, steps, setRequirements])
+
+  // Use context state or streaming state
+  const displayResult = result || requirements.result
+  const displaySteps = steps.size > 0 ? steps : requirements.steps
+
+  const handleAnalyze = async () => {
+    if (!requirements.requirements.trim()) {
       toast({
         variant: 'destructive',
         title: 'Missing Requirements',
@@ -39,11 +49,42 @@ export default function Requirements() {
       return
     }
 
-    mutation.mutate({
-      prompt: requirements,
-      context: context || undefined,
+    await startGeneration({
+      prompt: requirements.requirements,
+      task_type: 'requirements',
+      context: requirements.context || undefined,
+      model,
     })
   }
+
+  const handleCancel = () => {
+    cancel()
+    toast({
+      title: 'Analysis Cancelled',
+      description: 'The requirements analysis was stopped.',
+    })
+  }
+
+  const handleReset = () => {
+    resetStreaming()
+    resetRequirements()
+  }
+
+  // Show error toast when an error occurs
+  useEffect(() => {
+    if (error && !isStreaming) {
+      toast({
+        variant: 'destructive',
+        title: 'Analysis Failed',
+        description: error,
+      })
+    }
+  }, [error, isStreaming, toast])
+
+  // Get confidence from raw result
+  const confidence = displayResult
+    ? ((displayResult.raw as unknown as Record<string, unknown>)?.confidence as number ?? 0)
+    : 0
 
   return (
     <div className="space-y-6">
@@ -76,9 +117,10 @@ Example:
 - Users should be able to create, read, update, and delete posts
 - The system should support file uploads up to 10MB
 - All data should be encrypted at rest"
-                  value={requirements}
-                  onChange={(e) => setRequirements(e.target.value)}
+                  value={requirements.requirements}
+                  onChange={(e) => setRequirements({ requirements: e.target.value })}
                   className="min-h-[250px]"
+                  disabled={isStreaming}
                 />
               </div>
 
@@ -87,58 +129,87 @@ Example:
                 <Textarea
                   id="context"
                   placeholder="Add project context, constraints, or existing architecture details..."
-                  value={context}
-                  onChange={(e) => setContext(e.target.value)}
+                  value={requirements.context}
+                  onChange={(e) => setRequirements({ context: e.target.value })}
                   className="min-h-[100px]"
+                  disabled={isStreaming}
                 />
               </div>
 
-              <Button
-                onClick={handleAnalyze}
-                disabled={mutation.isPending}
-                className="w-full"
-              >
-                {mutation.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <FileText className="mr-2 h-4 w-4" />
-                    Analyze Requirements
-                  </>
+              <div className="flex gap-2">
+                <Button
+                  onClick={isStreaming ? handleCancel : handleAnalyze}
+                  variant={isStreaming ? 'destructive' : 'default'}
+                  className="flex-1"
+                >
+                  {isStreaming ? (
+                    <>
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Cancel
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="mr-2 h-4 w-4" />
+                      Analyze Requirements
+                    </>
+                  )}
+                </Button>
+                {displayResult && !isStreaming && (
+                  <Button variant="outline" onClick={handleReset}>
+                    Clear
+                  </Button>
                 )}
-              </Button>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Processing Steps - shown during streaming */}
+          {(isStreaming || displaySteps.size > 0) && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  {isStreaming && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Processing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProcessingSteps steps={displaySteps} currentStep={currentStep} />
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Output Section */}
         <div className="space-y-4">
-          {mutation.data ? (
+          {displayResult ? (
             <>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Analysis Results</CardTitle>
-                  <CardDescription>
-                    Confidence: {(mutation.data.confidence * 100).toFixed(0)}%
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="prose dark:prose-invert max-w-none">
-                    <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-lg overflow-auto max-h-[500px]">
-                      {mutation.data.result}
-                    </pre>
+              <Card className="overflow-hidden">
+                <CardHeader className="flex flex-row items-center justify-between py-3">
+                  <div>
+                    <CardTitle className="text-lg">Analysis Results</CardTitle>
+                    <CardDescription>
+                      Confidence: {(confidence * 100).toFixed(0)}%
+                    </CardDescription>
                   </div>
-                </CardContent>
+                </CardHeader>
               </Card>
-              {mutation.data.usage && (
+              <MarkdownRenderer
+                content={displayResult.result}
+                title="Analysis Details"
+              />
+              {displayResult.usage && (
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Tokens: {mutation.data.usage.total_tokens || 'N/A'}</span>
-                      <span>Cost: ${mutation.data.usage.cost?.toFixed(4) || '0.0000'}</span>
+                      <span>
+                        Tokens: {
+                          ((displayResult.usage.input_tokens as number | undefined) ?? 0) +
+                          ((displayResult.usage.output_tokens as number | undefined) ?? 0) ||
+                          (displayResult.usage.total_tokens as number | undefined) ||
+                          'N/A'
+                        }
+                      </span>
+                      <span>Cost: ${((displayResult.usage.cost as number | undefined) ?? 0).toFixed(4)}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -147,8 +218,17 @@ Example:
           ) : (
             <Card className="h-full min-h-[400px] flex items-center justify-center">
               <CardContent className="text-center text-muted-foreground">
-                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Analysis results will appear here</p>
+                {isStreaming ? (
+                  <>
+                    <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin opacity-50" />
+                    <p>Analyzing requirements...</p>
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Analysis results will appear here</p>
+                  </>
+                )}
               </CardContent>
             </Card>
           )}

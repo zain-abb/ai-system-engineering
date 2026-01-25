@@ -1,0 +1,32 @@
+{
+  "experiment_id": "comparison_20260118_161333",
+  "timestamp": "2026-01-18T16:15:54.057030",
+  "models_compared": [
+    "claude-3-5-haiku-20241022",
+    "claude-sonnet-4-20250514"
+  ],
+  "best_model_by_score": "claude-sonnet-4-20250514",
+  "best_model_by_cost_efficiency": "claude-sonnet-4-20250514",
+  "score_ranking": [
+    "claude-sonnet-4-20250514",
+    "claude-3-5-haiku-20241022"
+  ],
+  "cost_efficiency_ranking": [
+    "claude-sonnet-4-20250514",
+    "claude-3-5-haiku-20241022"
+  ],
+  "model_summaries": {
+    "claude-3-5-haiku-20241022": {
+      "display_name": "Claude 3.5 Haiku",
+      "pass_rate": 1.0,
+      "average_score": 0.9093355726546821,
+      "total_cost_usd": 0.08361299999999999
+    },
+    "claude-sonnet-4-20250514": {
+      "display_name": "Claude Sonnet 4",
+      "pass_rate": 1.0,
+      "average_score": 0.9101661556006564,
+      "total_cost_usd": 0.081528
+    }
+  }
+}

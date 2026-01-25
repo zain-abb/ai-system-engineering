@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader2, FolderOpen, Trash2, Database, History } from 'lucide-react'
+import { Loader2, FolderOpen, Trash2, Database, History, Cpu } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
+import { useSettings, CLAUDE_MODELS } from '@/contexts/SettingsContext'
+import { ConversationModal, type ConversationTurn } from '@/components/ConversationModal'
 
 // localStorage keys
 const STORAGE_KEYS = {
@@ -17,6 +20,7 @@ const STORAGE_KEYS = {
 }
 
 export default function Settings() {
+  const { model, setModel } = useSettings()
   const [indexDirectory, setIndexDirectory] = useState(() => {
     return localStorage.getItem(STORAGE_KEYS.INDEX_DIRECTORY) || ''
   })
@@ -32,6 +36,8 @@ export default function Settings() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.EXTENSIONS, extensions)
   }, [extensions])
+  const [selectedTurn, setSelectedTurn] = useState<ConversationTurn | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
   const { toast } = useToast()
   const queryClient = useQueryClient()
 
@@ -50,6 +56,30 @@ export default function Settings() {
     queryFn: api.getHistory,
   })
 
+  // Group messages into conversation turns (user + assistant pairs)
+  const conversationTurns = useMemo(() => {
+    if (!history) return []
+    const turns: ConversationTurn[] = []
+    for (let i = 0; i < history.length; i++) {
+      if (history[i].role === 'user') {
+        turns.push({
+          user: history[i],
+          assistant: history[i + 1]?.role === 'assistant' ? history[i + 1] : null,
+        })
+      }
+    }
+    return turns
+  }, [history])
+
+  // Format capability name for display
+  const formatCapability = (capability: unknown): string => {
+    if (typeof capability !== 'string' || !capability) return 'Unknown'
+    return capability
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
   const indexMutation = useMutation({
     mutationFn: api.indexCodebase,
     onSuccess: (data) => {
@@ -63,6 +93,24 @@ export default function Settings() {
       toast({
         variant: 'destructive',
         title: 'Indexing Failed',
+        description: error.message,
+      })
+    },
+  })
+
+  const clearRagMutation = useMutation({
+    mutationFn: api.clearRagIndex,
+    onSuccess: () => {
+      toast({
+        title: 'RAG Index Cleared',
+        description: 'The RAG index has been cleared successfully.',
+      })
+      queryClient.invalidateQueries({ queryKey: ['ragStats'] })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to Clear RAG Index',
         description: error.message,
       })
     },
@@ -117,6 +165,43 @@ export default function Settings() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* AI Model Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Cpu className="h-5 w-5" />
+              AI Model
+            </CardTitle>
+            <CardDescription>
+              Select the Claude model for all generations
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              {CLAUDE_MODELS.map((m) => (
+                <div
+                  key={m.id}
+                  onClick={() => setModel(m.id)}
+                  className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                    model === m.id
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div>
+                    <p className="font-medium">{m.name}</p>
+                    <p className="text-sm text-muted-foreground">{m.description}</p>
+                  </div>
+                  {model === m.id && <div className="h-2 w-2 rounded-full bg-primary" />}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Selected: <code className="bg-muted px-1 rounded">{model}</code>
+            </p>
+          </CardContent>
+        </Card>
+
         {/* RAG Indexing */}
         <Card>
           <CardHeader>
@@ -173,7 +258,26 @@ export default function Settings() {
 
             {/* RAG Stats */}
             <div className="space-y-2">
-              <p className="text-sm font-medium">Index Status</p>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">Index Status</p>
+                {ragStats?.total_chunks !== undefined && ragStats.total_chunks > 0 && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => clearRagMutation.mutate()}
+                    disabled={clearRagMutation.isPending}
+                  >
+                    {clearRagMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Clear Index
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
               {ragStats?.total_chunks !== undefined ? (
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
@@ -250,7 +354,7 @@ export default function Settings() {
                   Conversation History
                 </CardTitle>
                 <CardDescription>
-                  {history?.length || 0} messages in history
+                  {conversationTurns.length} conversation{conversationTurns.length !== 1 ? 's' : ''} in history
                 </CardDescription>
               </div>
               <Button
@@ -271,35 +375,28 @@ export default function Settings() {
             </div>
           </CardHeader>
           <CardContent>
-            {history && history.length > 0 ? (
-              <div className="space-y-2 max-h-[300px] overflow-auto">
-                {history.slice(0, 10).map((item, i) => (
+            {conversationTurns.length > 0 ? (
+              <div className="space-y-2 max-h-[400px] overflow-auto">
+                {conversationTurns.map((turn, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
+                    onClick={() => {
+                      setSelectedTurn(turn)
+                      setModalOpen(true)
+                    }}
+                    className="p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted/70 transition-colors"
                   >
-                    <span
-                      className={`text-xs font-medium px-2 py-1 rounded ${
-                        item.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary text-secondary-foreground'
-                      }`}
-                    >
-                      {item.role}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm truncate">{item.content}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {new Date(item.timestamp).toLocaleString()}
-                      </p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant="outline" className="text-xs">
+                        {formatCapability(turn.assistant?.metadata?.capability)}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(turn.user.timestamp).toLocaleString()}
+                      </span>
                     </div>
+                    <p className="text-sm truncate">{turn.user.content}</p>
                   </div>
                 ))}
-                {history.length > 10 && (
-                  <p className="text-sm text-muted-foreground text-center py-2">
-                    And {history.length - 10} more messages...
-                  </p>
-                )}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground text-center py-8">
@@ -309,6 +406,12 @@ export default function Settings() {
           </CardContent>
         </Card>
       </div>
+
+      <ConversationModal
+        turn={selectedTurn}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+      />
     </div>
   )
 }

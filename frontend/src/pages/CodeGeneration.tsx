@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { Loader2, Sparkles } from 'lucide-react'
+import { useEffect } from 'react'
+import { Loader2, Sparkles, XCircle } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,8 +12,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ResultDisplay } from '@/components/ResultDisplay'
+import { ProcessingSteps } from '@/components/ProcessingSteps'
 import { useToast } from '@/hooks/use-toast'
-import { api } from '@/lib/api'
+import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
+import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
+import type { CodeGenRequest, CodeGenResponse } from '@/types/api'
 
 const languages = [
   { value: 'python', label: 'Python' },
@@ -26,24 +29,34 @@ const languages = [
 ]
 
 export default function CodeGeneration() {
-  const [requirements, setRequirements] = useState('')
-  const [language, setLanguage] = useState('python')
-  const [context, setContext] = useState('')
   const { toast } = useToast()
+  const { model } = useSettings()
+  const { codeGeneration, setCodeGeneration, resetCodeGeneration } = useCapabilityState()
 
-  const mutation = useMutation({
-    mutationFn: api.generateCode,
-    onError: (error: Error) => {
-      toast({
-        variant: 'destructive',
-        title: 'Generation Failed',
-        description: error.message,
-      })
-    },
-  })
+  const {
+    isStreaming,
+    steps,
+    currentStep,
+    result,
+    error,
+    startGeneration,
+    cancel,
+    reset: resetStreaming,
+  } = useStreamingGeneration<CodeGenRequest, CodeGenResponse>('/code/generate/stream')
 
-  const handleGenerate = () => {
-    if (!requirements.trim()) {
+  // Sync streaming result to context when it changes
+  useEffect(() => {
+    if (result) {
+      setCodeGeneration({ result, steps })
+    }
+  }, [result, steps, setCodeGeneration])
+
+  // Use context state or streaming state
+  const displayResult = result || codeGeneration.result
+  const displaySteps = steps.size > 0 ? steps : codeGeneration.steps
+
+  const handleGenerate = async () => {
+    if (!codeGeneration.requirements.trim()) {
       toast({
         variant: 'destructive',
         title: 'Missing Requirements',
@@ -52,12 +65,37 @@ export default function CodeGeneration() {
       return
     }
 
-    mutation.mutate({
-      requirements,
-      language,
-      context: context || undefined,
+    await startGeneration({
+      requirements: codeGeneration.requirements,
+      language: codeGeneration.language,
+      context: codeGeneration.context || undefined,
+      model,
     })
   }
+
+  const handleCancel = () => {
+    cancel()
+    toast({
+      title: 'Generation Cancelled',
+      description: 'The code generation was stopped.',
+    })
+  }
+
+  const handleReset = () => {
+    resetStreaming()
+    resetCodeGeneration()
+  }
+
+  // Show error toast when an error occurs
+  useEffect(() => {
+    if (error && !isStreaming) {
+      toast({
+        variant: 'destructive',
+        title: 'Generation Failed',
+        description: error,
+      })
+    }
+  }, [error, isStreaming, toast])
 
   return (
     <div className="space-y-6">
@@ -84,15 +122,20 @@ export default function CodeGeneration() {
                 <Textarea
                   id="requirements"
                   placeholder="e.g., Create a function that calculates the factorial of a number using recursion..."
-                  value={requirements}
-                  onChange={(e) => setRequirements(e.target.value)}
+                  value={codeGeneration.requirements}
+                  onChange={(e) => setCodeGeneration({ requirements: e.target.value })}
                   className="min-h-[150px]"
+                  disabled={isStreaming}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="language">Programming Language</Label>
-                <Select value={language} onValueChange={setLanguage}>
+                <Select
+                  value={codeGeneration.language}
+                  onValueChange={(value) => setCodeGeneration({ language: value })}
+                  disabled={isStreaming}
+                >
                   <SelectTrigger id="language">
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
@@ -111,48 +154,78 @@ export default function CodeGeneration() {
                 <Textarea
                   id="context"
                   placeholder="Add any existing code or additional context..."
-                  value={context}
-                  onChange={(e) => setContext(e.target.value)}
+                  value={codeGeneration.context}
+                  onChange={(e) => setCodeGeneration({ context: e.target.value })}
                   className="min-h-[100px]"
+                  disabled={isStreaming}
                 />
               </div>
 
-              <Button
-                onClick={handleGenerate}
-                disabled={mutation.isPending}
-                className="w-full"
-              >
-                {mutation.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Generate Code
-                  </>
+              <div className="flex gap-2">
+                <Button
+                  onClick={isStreaming ? handleCancel : handleGenerate}
+                  variant={isStreaming ? 'destructive' : 'default'}
+                  className="flex-1"
+                >
+                  {isStreaming ? (
+                    <>
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Cancel
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Generate Code
+                    </>
+                  )}
+                </Button>
+                {displayResult && !isStreaming && (
+                  <Button variant="outline" onClick={handleReset}>
+                    Clear
+                  </Button>
                 )}
-              </Button>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Processing Steps - shown during streaming */}
+          {(isStreaming || displaySteps.size > 0) && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  {isStreaming && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Processing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProcessingSteps steps={displaySteps} currentStep={currentStep} />
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Output Section */}
         <div className="space-y-4">
-          {mutation.data ? (
+          {displayResult ? (
             <>
               <ResultDisplay
                 title="Generated Code"
-                content={mutation.data.result}
-                language={language}
+                content={displayResult.result}
+                language={codeGeneration.language}
               />
-              {mutation.data.usage && (
+              {displayResult.usage && (
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Tokens: {mutation.data.usage.total_tokens || 'N/A'}</span>
-                      <span>Cost: ${mutation.data.usage.cost?.toFixed(4) || '0.0000'}</span>
+                      <span>
+                        Tokens: {
+                          ((displayResult.usage.input_tokens as number | undefined) ?? 0) +
+                          ((displayResult.usage.output_tokens as number | undefined) ?? 0) ||
+                          (displayResult.usage.total_tokens as number | undefined) ||
+                          'N/A'
+                        }
+                      </span>
+                      <span>Cost: ${((displayResult.usage.cost as number | undefined) ?? 0).toFixed(4)}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -161,8 +234,17 @@ export default function CodeGeneration() {
           ) : (
             <Card className="h-full min-h-[400px] flex items-center justify-center">
               <CardContent className="text-center text-muted-foreground">
-                <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Generated code will appear here</p>
+                {isStreaming ? (
+                  <>
+                    <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin opacity-50" />
+                    <p>Generating code...</p>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Generated code will appear here</p>
+                  </>
+                )}
               </CardContent>
             </Card>
           )}

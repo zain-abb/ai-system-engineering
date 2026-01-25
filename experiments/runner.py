@@ -9,12 +9,13 @@ from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass, field, is_dataclass, asdict
 from enum import Enum
 
-from experiments.config import ExperimentConfig
+from experiments.config import ExperimentConfig, PassAtKConfig
 
 # Import services first to avoid circular imports
 from src.services.claude_client import ClaudeClient
-from src.evaluation.base import EvaluationTask, Issue, Severity
-from src.evaluation.metrics import EvaluationPipeline, EvaluationReport, TaskEvaluationResult
+from src.evaluation.base import EvaluationTask
+from src.evaluation.metrics import EvaluationPipeline, EvaluationReport
+from src.evaluation.pass_at_k import PassAtKEvaluator, PassAtKResult, aggregate_pass_at_k_results
 
 # Import prompts directly to avoid circular import through __init__.py
 from src.agent.prompts.code_generation import CODE_GEN_SYSTEM, format_code_gen_prompt
@@ -376,6 +377,228 @@ class ExperimentRunner:
             print("Top Issues:")
             for category, count in list(summary["top_issue_categories"].items())[:5]:
                 print(f"  - {category}: {count}")
+
+        print("=" * 60)
+
+    async def run_pass_at_k_experiment(
+        self,
+        progress_callback: Optional[Callable[[int, int, str], None]] = None
+    ) -> Dict[str, Any]:
+        """
+        Run pass@k evaluation experiment.
+
+        Generates multiple samples per task and computes pass@k metrics.
+
+        Args:
+            progress_callback: Optional callback(current, total, task_id)
+
+        Returns:
+            Dictionary with pass@k results and aggregated metrics
+        """
+        # Ensure pass@k config is set
+        if not self.config.pass_at_k_config:
+            self.config.pass_at_k_config = PassAtKConfig()
+
+        pk_config = self.config.pass_at_k_config
+
+        # Create output directory
+        output_path = self.config.get_output_path()
+        os.makedirs(output_path, exist_ok=True)
+        os.makedirs(os.path.join(output_path, "checkpoints"), exist_ok=True)
+
+        # Load dataset
+        tasks = self.load_dataset()
+        total_tasks = len(tasks)
+
+        if self.config.verbose:
+            print(f"\nStarting Pass@K experiment: {self.config.experiment_name}")
+            print(f"Total tasks: {total_tasks}")
+            print(f"Samples per task: {pk_config.num_samples}")
+            print(f"K values: {pk_config.k_values}")
+            print(f"Temperatures: {pk_config.temperatures}")
+            print(f"Output directory: {output_path}\n")
+
+        # Save initial config
+        self._save_config(output_path)
+
+        # Initialize pass@k evaluator
+        evaluator = PassAtKEvaluator(
+            client=self.client,
+            num_samples=pk_config.num_samples,
+            k_values=pk_config.k_values,
+            temperatures=pk_config.temperatures,
+            max_concurrent=pk_config.max_concurrent,
+            correctness_threshold=pk_config.correctness_threshold
+        )
+
+        # Store results
+        pass_at_k_results: List[PassAtKResult] = []
+        self.results.start_time = datetime.now()
+
+        # Process each task
+        for i, task in enumerate(tasks):
+            task_id = task["task_id"]
+
+            if progress_callback:
+                progress_callback(i + 1, total_tasks, task_id)
+            elif self.config.verbose:
+                print(f"[{i+1}/{total_tasks}] Processing: {task_id}")
+
+            # Format prompt for code generation
+            prompt = format_code_gen_prompt(
+                requirements=task["input_text"],
+                language=task.get("language", "python"),
+                context=None,
+                instructions=""
+            )
+
+            # Get test cases
+            test_cases = task.get("metadata", {}).get("test_cases", [])
+            reference_code = task.get("reference_output")
+
+            # Run pass@k evaluation
+            try:
+                result = await evaluator.evaluate_task(
+                    task_id=task_id,
+                    prompt=prompt,
+                    test_cases=test_cases,
+                    reference_code=reference_code,
+                    system_prompt=CODE_GEN_SYSTEM,
+                    language=task.get("language", "python")
+                )
+                pass_at_k_results.append(result)
+
+                if self.config.verbose:
+                    print(f"  -> Pass@1: {result.pass_at_k.get(1, 0):.3f}, "
+                          f"Correct: {result.num_correct}/{result.num_samples}")
+
+            except Exception as e:
+                logger.error(f"Error evaluating task {task_id}: {e}")
+                # Create empty result for failed task
+                pass_at_k_results.append(PassAtKResult(
+                    task_id=task_id,
+                    num_samples=0,
+                    num_correct=0,
+                    pass_at_k={k: 0.0 for k in pk_config.k_values},
+                    samples=[],
+                    best_sample=None,
+                    average_score=0.0
+                ))
+
+            # Save checkpoint
+            if self.config.save_checkpoints and (i + 1) % self.config.checkpoint_interval == 0:
+                self._save_pass_at_k_checkpoint(output_path, i + 1, pass_at_k_results)
+
+        self.results.end_time = datetime.now()
+        self.results.api_cost = self.client.get_usage_stats().get("total_cost", 0.0)
+
+        # Aggregate results
+        aggregated = aggregate_pass_at_k_results(pass_at_k_results)
+
+        # Build final results
+        final_results = {
+            "config": self.config.to_dict(),
+            "git_commit": ExperimentConfig.get_git_commit(),
+            "environment": ExperimentConfig.get_environment_info(),
+            "start_time": self.results.start_time.isoformat(),
+            "end_time": self.results.end_time.isoformat(),
+            "api_cost": self.results.api_cost,
+            "aggregated": aggregated,
+            "task_results": [r.to_dict() for r in pass_at_k_results],
+        }
+
+        # Save results
+        self._save_pass_at_k_results(output_path, final_results, aggregated)
+
+        if self.config.verbose:
+            self._print_pass_at_k_summary(aggregated)
+
+        return final_results
+
+    def _save_pass_at_k_checkpoint(
+        self,
+        output_path: str,
+        task_num: int,
+        results: List[PassAtKResult]
+    ):
+        """Save pass@k checkpoint."""
+        checkpoint_path = os.path.join(
+            output_path,
+            "checkpoints",
+            f"pass_at_k_checkpoint_{task_num}.json"
+        )
+        checkpoint_data = {
+            "tasks_completed": task_num,
+            "timestamp": datetime.now().isoformat(),
+            "task_results": [r.to_dict() for r in results],
+        }
+        with open(checkpoint_path, 'w') as f:
+            json.dump(checkpoint_data, f, indent=2, cls=ExperimentJSONEncoder)
+
+        if self.config.verbose:
+            print(f"  Checkpoint saved: {task_num} tasks")
+
+    def _save_pass_at_k_results(
+        self,
+        output_path: str,
+        results: Dict[str, Any],
+        aggregated: Dict[str, Any]
+    ):
+        """Save pass@k results."""
+        # Save full results
+        results_path = os.path.join(output_path, "pass_at_k_results.json")
+        with open(results_path, 'w') as f:
+            json.dump(results, f, indent=2, cls=ExperimentJSONEncoder)
+
+        # Save summary
+        summary_path = os.path.join(output_path, "pass_at_k_summary.json")
+        summary = {
+            "experiment_name": self.config.experiment_name,
+            "model": self.config.model,
+            "num_tasks": aggregated["num_tasks"],
+            "total_samples": aggregated["total_samples"],
+            "total_correct": aggregated["total_correct"],
+            "average_pass_rate": aggregated["average_pass_rate"],
+            "average_score": aggregated["average_score"],
+            "pass_at_k": aggregated["pass_at_k"],
+            "api_cost": self.results.api_cost,
+            "duration_seconds": (
+                self.results.end_time - self.results.start_time
+            ).total_seconds() if self.results.end_time else 0,
+        }
+        with open(summary_path, 'w') as f:
+            json.dump(summary, f, indent=2)
+
+        if self.config.verbose:
+            print(f"\nResults saved to: {output_path}")
+
+    def _print_pass_at_k_summary(self, aggregated: Dict[str, Any]):
+        """Print pass@k experiment summary."""
+        duration = (
+            self.results.end_time - self.results.start_time
+        ).total_seconds() if self.results.end_time else 0
+
+        print("\n" + "=" * 60)
+        print("PASS@K EXPERIMENT SUMMARY")
+        print("=" * 60)
+        print(f"Experiment: {self.config.experiment_name}")
+        print(f"Model: {self.config.model}")
+        print(f"Duration: {duration:.1f} seconds")
+        print(f"API Cost: ${self.results.api_cost:.4f}")
+        print("-" * 60)
+        print(f"Total Tasks: {aggregated['num_tasks']}")
+        print(f"Total Samples: {aggregated['total_samples']}")
+        print(f"Total Correct: {aggregated['total_correct']}")
+        print(f"Average Pass Rate: {aggregated['average_pass_rate']*100:.1f}%")
+        print(f"Average Score: {aggregated['average_score']:.3f}")
+        print("-" * 60)
+        print("Pass@K Results:")
+
+        for k, stats in aggregated.get("pass_at_k", {}).items():
+            print(f"  Pass@{k}:")
+            print(f"    Mean: {stats['mean']:.3f}")
+            print(f"    Std:  {stats['std']:.3f}")
+            print(f"    Range: [{stats['min']:.3f}, {stats['max']:.3f}]")
 
         print("=" * 60)
 

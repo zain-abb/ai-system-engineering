@@ -5,24 +5,28 @@ export interface GenerateRequest {
   context?: string
   language?: string
   options?: Record<string, unknown>
+  model?: string
 }
 
 export interface CodeGenRequest {
   requirements: string
   language?: string
   context?: string
+  model?: string
 }
 
 export interface TestGenRequest {
   code: string
   language?: string
   framework?: string
+  model?: string
 }
 
 export interface CodeReviewRequest {
   code: string
   language?: string
   focus?: string
+  model?: string
 }
 
 export interface IndexRequest {
@@ -143,4 +147,48 @@ export interface Issue {
   description: string
   location?: string
   suggestion?: string
+}
+
+// Streaming Types
+export type ProcessingStepType =
+  | 'intent_classification'
+  | 'semantic_search'
+  | 'reranking'
+  | 'llm_generation'
+  | 'post_processing'
+
+export type StreamEventType =
+  | 'step_start'
+  | 'step_complete'
+  | 'step_progress'
+  | 'error'
+  | 'done'
+
+export interface StreamEvent {
+  type: StreamEventType
+  step: ProcessingStepType | null
+  data: Record<string, unknown>
+  timestamp: number
+}
+
+export interface StreamStepData {
+  message: string
+  duration_ms?: number
+  confidence?: number
+  candidates_found?: number
+  files?: string[]
+  input_tokens?: number
+  output_tokens?: number
+}
+
+export interface StreamDoneData {
+  result: string
+  usage: UsageInfo
+  capability_used: string | null
+  success: boolean
+  error?: string
+}
+
+export interface StreamErrorData {
+  message: string
 }

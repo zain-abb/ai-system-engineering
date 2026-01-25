@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { Loader2, TestTube2 } from 'lucide-react'
+import { useEffect } from 'react'
+import { Loader2, TestTube2, XCircle } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -13,8 +12,12 @@ import {
 } from '@/components/ui/select'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ResultDisplay } from '@/components/ResultDisplay'
+import { ProcessingSteps } from '@/components/ProcessingSteps'
 import { useToast } from '@/hooks/use-toast'
-import { api } from '@/lib/api'
+import { useStreamingGeneration } from '@/hooks/useStreamingGeneration'
+import { useCapabilityState } from '@/contexts/CapabilityStateContext'
+import { useSettings } from '@/contexts/SettingsContext'
+import type { TestGenRequest, TestGenResponse } from '@/types/api'
 
 const languages = [
   { value: 'python', label: 'Python' },
@@ -43,32 +46,42 @@ const frameworks = {
 }
 
 export default function TestGeneration() {
-  const [code, setCode] = useState('')
-  const [language, setLanguage] = useState('python')
-  const [framework, setFramework] = useState('pytest')
   const { toast } = useToast()
+  const { model } = useSettings()
+  const { testGeneration, setTestGeneration, resetTestGeneration } = useCapabilityState()
 
-  const mutation = useMutation({
-    mutationFn: api.generateTests,
-    onError: (error: Error) => {
-      toast({
-        variant: 'destructive',
-        title: 'Generation Failed',
-        description: error.message,
-      })
-    },
-  })
+  const {
+    isStreaming,
+    steps,
+    currentStep,
+    result,
+    error,
+    startGeneration,
+    cancel,
+    reset: resetStreaming,
+  } = useStreamingGeneration<TestGenRequest, TestGenResponse>('/tests/generate/stream')
+
+  // Sync streaming result to context when it changes
+  useEffect(() => {
+    if (result) {
+      setTestGeneration({ result, steps })
+    }
+  }, [result, steps, setTestGeneration])
+
+  // Use context state or streaming state
+  const displayResult = result || testGeneration.result
+  const displaySteps = steps.size > 0 ? steps : testGeneration.steps
 
   const handleLanguageChange = (value: string) => {
-    setLanguage(value)
+    setTestGeneration({ language: value })
     const availableFrameworks = frameworks[value as keyof typeof frameworks]
     if (availableFrameworks.length > 0) {
-      setFramework(availableFrameworks[0].value)
+      setTestGeneration({ framework: availableFrameworks[0].value })
     }
   }
 
-  const handleGenerate = () => {
-    if (!code.trim()) {
+  const handleGenerate = async () => {
+    if (!testGeneration.code.trim()) {
       toast({
         variant: 'destructive',
         title: 'Missing Code',
@@ -77,14 +90,39 @@ export default function TestGeneration() {
       return
     }
 
-    mutation.mutate({
-      code,
-      language,
-      framework,
+    await startGeneration({
+      code: testGeneration.code,
+      language: testGeneration.language,
+      framework: testGeneration.framework,
+      model,
     })
   }
 
-  const availableFrameworks = frameworks[language as keyof typeof frameworks] || []
+  const handleCancel = () => {
+    cancel()
+    toast({
+      title: 'Generation Cancelled',
+      description: 'The test generation was stopped.',
+    })
+  }
+
+  const handleReset = () => {
+    resetStreaming()
+    resetTestGeneration()
+  }
+
+  // Show error toast when an error occurs
+  useEffect(() => {
+    if (error && !isStreaming) {
+      toast({
+        variant: 'destructive',
+        title: 'Generation Failed',
+        description: error,
+      })
+    }
+  }, [error, isStreaming, toast])
+
+  const availableFrameworks = frameworks[testGeneration.language as keyof typeof frameworks] || []
 
   return (
     <div className="space-y-6">
@@ -109,7 +147,11 @@ export default function TestGeneration() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="language">Language</Label>
-                  <Select value={language} onValueChange={handleLanguageChange}>
+                  <Select
+                    value={testGeneration.language}
+                    onValueChange={handleLanguageChange}
+                    disabled={isStreaming}
+                  >
                     <SelectTrigger id="language">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
@@ -125,7 +167,11 @@ export default function TestGeneration() {
 
                 <div className="space-y-2">
                   <Label htmlFor="framework">Test Framework</Label>
-                  <Select value={framework} onValueChange={setFramework}>
+                  <Select
+                    value={testGeneration.framework}
+                    onValueChange={(value) => setTestGeneration({ framework: value })}
+                    disabled={isStreaming}
+                  >
                     <SelectTrigger id="framework">
                       <SelectValue placeholder="Select framework" />
                     </SelectTrigger>
@@ -143,50 +189,80 @@ export default function TestGeneration() {
               <div className="space-y-2">
                 <Label>Code to Test</Label>
                 <CodeEditor
-                  value={code}
-                  onChange={setCode}
-                  language={language}
+                  value={testGeneration.code}
+                  onChange={(value) => setTestGeneration({ code: value })}
+                  language={testGeneration.language}
                   placeholder="Paste your code here..."
                   minHeight="250px"
+                  disabled={isStreaming}
                 />
               </div>
 
-              <Button
-                onClick={handleGenerate}
-                disabled={mutation.isPending}
-                className="w-full"
-              >
-                {mutation.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating Tests...
-                  </>
-                ) : (
-                  <>
-                    <TestTube2 className="mr-2 h-4 w-4" />
-                    Generate Tests
-                  </>
+              <div className="flex gap-2">
+                <Button
+                  onClick={isStreaming ? handleCancel : handleGenerate}
+                  variant={isStreaming ? 'destructive' : 'default'}
+                  className="flex-1"
+                >
+                  {isStreaming ? (
+                    <>
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Cancel
+                    </>
+                  ) : (
+                    <>
+                      <TestTube2 className="mr-2 h-4 w-4" />
+                      Generate Tests
+                    </>
+                  )}
+                </Button>
+                {displayResult && !isStreaming && (
+                  <Button variant="outline" onClick={handleReset}>
+                    Clear
+                  </Button>
                 )}
-              </Button>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Processing Steps - shown during streaming */}
+          {(isStreaming || displaySteps.size > 0) && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  {isStreaming && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Processing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProcessingSteps steps={displaySteps} currentStep={currentStep} />
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Output Section */}
         <div className="space-y-4">
-          {mutation.data ? (
+          {displayResult ? (
             <>
               <ResultDisplay
                 title="Generated Tests"
-                content={mutation.data.result}
-                language={language}
+                content={displayResult.result}
+                language={testGeneration.language}
               />
-              {mutation.data.usage && (
+              {displayResult.usage && (
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Tokens: {mutation.data.usage.total_tokens || 'N/A'}</span>
-                      <span>Cost: ${mutation.data.usage.cost?.toFixed(4) || '0.0000'}</span>
+                      <span>
+                        Tokens: {
+                          ((displayResult.usage.input_tokens as number | undefined) ?? 0) +
+                          ((displayResult.usage.output_tokens as number | undefined) ?? 0) ||
+                          (displayResult.usage.total_tokens as number | undefined) ||
+                          'N/A'
+                        }
+                      </span>
+                      <span>Cost: ${((displayResult.usage.cost as number | undefined) ?? 0).toFixed(4)}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -195,8 +271,17 @@ export default function TestGeneration() {
           ) : (
             <Card className="h-full min-h-[400px] flex items-center justify-center">
               <CardContent className="text-center text-muted-foreground">
-                <TestTube2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Generated tests will appear here</p>
+                {isStreaming ? (
+                  <>
+                    <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin opacity-50" />
+                    <p>Generating tests...</p>
+                  </>
+                ) : (
+                  <>
+                    <TestTube2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Generated tests will appear here</p>
+                  </>
+                )}
               </CardContent>
             </Card>
           )}
