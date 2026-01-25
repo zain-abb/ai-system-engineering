@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 
 // Mock evaluation function (would call backend in real implementation)
-async function evaluateCode(code: string, _prompt: string) {
+async function evaluateCode(_code: string, _prompt: string) {
   // Simulate API call
   await new Promise((resolve) => setTimeout(resolve, 1500))
 
