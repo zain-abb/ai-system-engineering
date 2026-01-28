@@ -17,11 +17,12 @@ import asyncio
 import logging
 import sys
 from contextlib import asynccontextmanager
-from typing import Optional
+from typing import Optional, List
+import shutil
 
 import json
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -630,6 +631,121 @@ async def search_code(request: SearchRequest):
         }
     except Exception as e:
         logger.error(f"Search failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/rag/upload")
+async def upload_and_index(
+    files: List[UploadFile] = File(...),
+    extensions: Optional[str] = Form(None),
+    relative_paths: Optional[str] = Form(None)
+):
+    """Upload files and index them for RAG retrieval.
+
+    Args:
+        files: List of files to upload
+        extensions: Comma-separated list of file extensions to index (e.g., ".py,.js,.ts")
+        relative_paths: JSON array of relative paths corresponding to each file
+    """
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    upload_dir = config.upload.upload_directory
+    max_file_size = config.upload.max_file_size_mb * 1024 * 1024
+    max_total_size = config.upload.max_total_size_mb * 1024 * 1024
+
+    # Parse relative paths if provided
+    paths_list: List[str] = []
+    if relative_paths:
+        try:
+            paths_list = json.loads(relative_paths)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=400, detail="Invalid relative_paths JSON")
+
+    # Validate total size
+    total_size = 0
+    for file in files:
+        # Read file size
+        file.file.seek(0, 2)
+        size = file.file.tell()
+        file.file.seek(0)
+
+        if size > max_file_size:
+            raise HTTPException(
+                status_code=400,
+                detail=f"File {file.filename} exceeds maximum size of {config.upload.max_file_size_mb}MB"
+            )
+        total_size += size
+
+    if total_size > max_total_size:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Total upload size exceeds maximum of {config.upload.max_total_size_mb}MB"
+        )
+
+    try:
+        # Clear existing uploads directory contents (not the directory itself, as it may be a volume mount)
+        upload_path = os.path.join(upload_dir)
+        os.makedirs(upload_path, exist_ok=True)
+        for item in os.listdir(upload_path):
+            item_path = os.path.join(upload_path, item)
+            if os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+            else:
+                os.remove(item_path)
+
+        # Clear existing RAG index
+        if agent.retriever:
+            await asyncio.to_thread(agent.retriever.clear)
+            logger.info("Cleared existing RAG index before upload")
+
+        # Save files with their relative paths
+        files_uploaded = 0
+        for i, file in enumerate(files):
+            # Determine the relative path
+            if paths_list and i < len(paths_list):
+                rel_path = paths_list[i]
+            else:
+                rel_path = file.filename or f"file_{i}"
+
+            # Sanitize path to prevent directory traversal
+            rel_path = os.path.normpath(rel_path).lstrip(os.sep)
+            if rel_path.startswith(".."):
+                continue
+
+            # Create full path
+            file_path = os.path.join(upload_path, rel_path)
+
+            # Create parent directories
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+            # Write file
+            content = await file.read()
+            with open(file_path, "wb") as f:
+                f.write(content)
+            files_uploaded += 1
+
+        # Parse extensions if provided
+        ext_list = None
+        if extensions:
+            ext_list = [e.strip() for e in extensions.split(",") if e.strip()]
+
+        # Index the uploaded files
+        chunk_count = await asyncio.to_thread(
+            agent.index_codebase,
+            upload_path,
+            ext_list
+        )
+
+        return {
+            "status": "uploaded_and_indexed",
+            "files_uploaded": files_uploaded,
+            "chunks_indexed": chunk_count,
+            "upload_directory": upload_path
+        }
+
+    except Exception as e:
+        logger.error(f"Upload and index failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

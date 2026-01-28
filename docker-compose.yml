@@ -29,6 +29,7 @@ services:
       - DAILY_API_BUDGET=${DAILY_API_BUDGET:-10.0}
     volumes:
       - ./data:/app/data
+      - uploads-data:/app/uploads
       - app-logs:/app/logs
     depends_on:
       chromadb:
@@ -60,6 +61,7 @@ services:
 volumes:
   chroma-data:
   app-logs:
+  uploads-data:
 
 networks:
   se-agent-network:

@@ -92,6 +92,13 @@ export interface IndexResponse {
   directory: string
 }
 
+export interface UploadResponse {
+  status: string
+  files_uploaded: number
+  chunks_indexed: number
+  upload_directory: string
+}
+
 export interface RagStats {
   status?: string
   total_chunks?: number

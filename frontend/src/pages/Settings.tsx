@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader2, FolderOpen, Trash2, Database, History, Cpu } from 'lucide-react'
+import { Loader2, Trash2, Database, History, Cpu, Upload } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -12,27 +12,22 @@ import { useToast } from '@/hooks/use-toast'
 import { api } from '@/lib/api'
 import { useSettings, CLAUDE_MODELS } from '@/contexts/SettingsContext'
 import { ConversationModal, type ConversationTurn } from '@/components/ConversationModal'
+import { FileUpload, type FileWithPath } from '@/components/FileUpload'
 
 // localStorage keys
 const STORAGE_KEYS = {
-  INDEX_DIRECTORY: 'se-agent-index-directory',
   EXTENSIONS: 'se-agent-extensions',
 }
 
 export default function Settings() {
   const { model, setModel } = useSettings()
-  const [indexDirectory, setIndexDirectory] = useState(() => {
-    return localStorage.getItem(STORAGE_KEYS.INDEX_DIRECTORY) || ''
-  })
+  const [selectedFiles, setSelectedFiles] = useState<FileWithPath[]>([])
+  const [uploadProgress, setUploadProgress] = useState(0)
   const [extensions, setExtensions] = useState(() => {
     return localStorage.getItem(STORAGE_KEYS.EXTENSIONS) || '.py, .js, .ts'
   })
 
-  // Persist to localStorage when values change
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.INDEX_DIRECTORY, indexDirectory)
-  }, [indexDirectory])
-
+  // Persist extensions to localStorage when values change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.EXTENSIONS, extensions)
   }, [extensions])
@@ -80,21 +75,40 @@ export default function Settings() {
       .join(' ')
   }
 
-  const indexMutation = useMutation({
-    mutationFn: api.indexCodebase,
+  const uploadMutation = useMutation({
+    mutationFn: async () => {
+      const files = selectedFiles.map((f) => f.file)
+      const paths = selectedFiles.map((f) => f.relativePath)
+      const extList = extensions
+        .split(',')
+        .map((e) => e.trim())
+        .filter((e) => e)
+
+      setUploadProgress(10)
+      const result = await api.uploadAndIndex(
+        files,
+        paths,
+        extList.length > 0 ? extList : undefined
+      )
+      setUploadProgress(100)
+      return result
+    },
     onSuccess: (data) => {
       toast({
-        title: 'Indexing Complete',
-        description: `Indexed ${data.chunks_indexed} chunks from ${data.directory}`,
+        title: 'Upload & Index Complete',
+        description: `Uploaded ${data.files_uploaded} files, indexed ${data.chunks_indexed} chunks`,
       })
       queryClient.invalidateQueries({ queryKey: ['ragStats'] })
+      setSelectedFiles([])
+      setUploadProgress(0)
     },
     onError: (error: Error) => {
       toast({
         variant: 'destructive',
-        title: 'Indexing Failed',
+        title: 'Upload Failed',
         description: error.message,
       })
+      setUploadProgress(0)
     },
   })
 
@@ -134,25 +148,17 @@ export default function Settings() {
     },
   })
 
-  const handleIndex = () => {
-    if (!indexDirectory.trim()) {
+  const handleUploadAndIndex = () => {
+    if (selectedFiles.length === 0) {
       toast({
         variant: 'destructive',
-        title: 'Missing Directory',
-        description: 'Please enter a directory path to index.',
+        title: 'No Files Selected',
+        description: 'Please select files or a folder to upload.',
       })
       return
     }
 
-    const extList = extensions
-      .split(',')
-      .map((e) => e.trim())
-      .filter((e) => e)
-
-    indexMutation.mutate({
-      directory: indexDirectory,
-      extensions: extList.length > 0 ? extList : undefined,
-    })
+    uploadMutation.mutate()
   }
 
   return (
@@ -210,46 +216,47 @@ export default function Settings() {
               RAG Index
             </CardTitle>
             <CardDescription>
-              Index your codebase for context-aware generation
+              Upload and index your codebase for context-aware generation
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="directory">Directory Path</Label>
-              <Textarea
-                id="directory"
-                placeholder="/path/to/your/codebase"
-                value={indexDirectory}
-                onChange={(e) => setIndexDirectory(e.target.value)}
-                className="min-h-[60px]"
-              />
-            </div>
+            <FileUpload
+              selectedFiles={selectedFiles}
+              onFilesSelected={setSelectedFiles}
+              disabled={uploadMutation.isPending}
+              isUploading={uploadMutation.isPending}
+              uploadProgress={uploadProgress}
+            />
 
             <div className="space-y-2">
-              <Label htmlFor="extensions">File Extensions (comma-separated)</Label>
+              <Label htmlFor="extensions">File Extensions Filter (comma-separated, optional)</Label>
               <Textarea
                 id="extensions"
                 placeholder=".py, .js, .ts"
                 value={extensions}
                 onChange={(e) => setExtensions(e.target.value)}
                 className="min-h-[40px]"
+                disabled={uploadMutation.isPending}
               />
+              <p className="text-xs text-muted-foreground">
+                Only files with these extensions will be indexed. Leave empty to index all supported files.
+              </p>
             </div>
 
             <Button
-              onClick={handleIndex}
-              disabled={indexMutation.isPending}
+              onClick={handleUploadAndIndex}
+              disabled={uploadMutation.isPending || selectedFiles.length === 0}
               className="w-full"
             >
-              {indexMutation.isPending ? (
+              {uploadMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Indexing...
+                  Uploading & Indexing...
                 </>
               ) : (
                 <>
-                  <FolderOpen className="mr-2 h-4 w-4" />
-                  Index Codebase
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload & Index {selectedFiles.length > 0 && `(${selectedFiles.length} files)`}
                 </>
               )}
             </Button>

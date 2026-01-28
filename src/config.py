@@ -50,6 +50,16 @@ class CostConfig:
 
 
 @dataclass
+class UploadConfig:
+    """File upload configuration."""
+    upload_directory: str = field(
+        default_factory=lambda: os.getenv("UPLOAD_DIRECTORY", "/app/uploads")
+    )
+    max_file_size_mb: int = 10
+    max_total_size_mb: int = 100
+
+
+@dataclass
 class AppConfig:
     """Main application configuration."""
     debug: bool = field(
@@ -67,6 +77,7 @@ class Config:
     chroma: ChromaConfig = field(default_factory=ChromaConfig)
     cost: CostConfig = field(default_factory=CostConfig)
     app: AppConfig = field(default_factory=AppConfig)
+    upload: UploadConfig = field(default_factory=UploadConfig)
 
     def validate(self) -> bool:
         """Validate required configuration."""
